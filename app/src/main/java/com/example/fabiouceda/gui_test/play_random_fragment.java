@@ -8,20 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
+public class play_random_fragment extends Fragment {
 
-public class profile_fragment extends Fragment {
-
-    private final String TAG = "TAG1_PROFILE_FRAG";
+    private final String TAG = "TAG1_PLAY_RAND_FRAG";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView called");
 
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_play_random, container, false);
     }
 
 
