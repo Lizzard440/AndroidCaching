@@ -66,7 +66,6 @@ public class profile_fragment extends Fragment {
 
                     ((MainActivity) getActivity()).display_login_Screen();
 
-
                 } else{
                     // Logout
                     tv_username.setText("Username");
