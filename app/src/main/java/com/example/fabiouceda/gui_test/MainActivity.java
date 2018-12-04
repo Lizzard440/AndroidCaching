@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String s_username;
     private String s_aliasname;
     private int i_score;
+    private boolean x_user_present;
 
     /**
      * onCreate gets called on App-Start
@@ -130,6 +131,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
+    }
+
+    public boolean is_user_present(){
+        return(x_user_present);
+    }
+
+    public void set_user_present(boolean user_present_){
+        x_user_present = user_present_;
+    }
+
+    public void set_username(String username_){
+        s_username = username_;
+    }
+
+    public void set_aliasname(String aliasname_){
+        s_aliasname = aliasname_;
+    }
+
+    public void set_score(int score_){
+        i_score = score_;
     }
 
     public void update_UI(){
