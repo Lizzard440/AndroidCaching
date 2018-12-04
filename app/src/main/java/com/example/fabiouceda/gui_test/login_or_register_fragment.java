@@ -11,15 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class login_or_register_fragment extends Fragment {
 
     private final String TAG = "TAG1_LOGIN_FRAG";
     private Button bt_submit;
 
+    private FirebaseAuth mAuth;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView called");
+
+        mAuth = FirebaseAuth.getInstance();
 
         View v_play_rand_fragment = inflater.inflate(R.layout.login_and_register, container, false);
 
