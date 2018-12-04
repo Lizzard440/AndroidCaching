@@ -12,6 +12,12 @@
         android:text="Browse Challanges"
         android:textSize="30sp" />
 
-
+    <Button
+        android:id="@+id/get_ch_frag_help"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="?" />
 
 </RelativeLayout>

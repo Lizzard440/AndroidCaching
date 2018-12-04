@@ -11,4 +11,12 @@
         android:textSize="30sp"
         android:layout_centerInParent="true"/>
 
+    <Button
+        android:id="@+id/settings_frag_help"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="?" />
+
 </RelativeLayout>
