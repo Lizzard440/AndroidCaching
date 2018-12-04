@@ -10,12 +10,33 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private final String TAG = "TAG1_MAIN_ACT";
 
+    // Objects
+    private TextView tv_drawer_username;
+    private TextView tv_drawer_aliasname;
+    private ImageView iv_drawer_profilepic;
+
+    // "Simple" Variables
+    private final String TAG = "TAG1_MAIN_ACT";
+    private String s_username;
+    private String s_aliasname;
+    private int i_score;
+
+    /**
+     * onCreate gets called on App-Start
+     * Code-Snippets by:
+     * - Coding in Flow (Youtube)
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.v(TAG, "onCreate called");
 
+        // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
         Toolbar toolbar = findViewById(R.id.toolar);
         setSupportActionBar(toolbar);
@@ -38,9 +60,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new profile_fragment()).commit();
-            navigation_view.setCheckedItem(R.id.nav_profile);
-        }
+                    new play_random_fragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_play);
+        } // Snippet End
+
+        s_username = "Lizzard440";
+        s_aliasname = "Fabio Uceda Perona";
+        i_score = 9999;
+
+        View Head = navigation_view.getHeaderView(0);
+
+        Head.findViewById(R.id.nav_head_username);
+
+        tv_drawer_username = Head.findViewById(R.id.nav_head_username);
+        tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
     }
 
     @Override
@@ -85,5 +118,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    public String get_username(){
+        return (s_username); // TODO replace with Variable Username
+    }
+
+    public String get_aliasname(){
+        return (s_aliasname); // TODO replace with Variable Alias-Name
+    }
+
+    public int get_score(){
+        return (i_score); // TODO replace with Variable Score
+    }
+
+    public void update_UI(){
+        tv_drawer_username.setText(s_username);
+        tv_drawer_aliasname.setText(s_aliasname);
     }
 }
