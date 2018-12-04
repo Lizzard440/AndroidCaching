@@ -153,6 +153,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = score_;
     }
 
+    public void attempt_login(String email, String password){}
+
+    public void attempt_register(String email, String password){}
+
+    public void display_login_Screen(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new login_or_register_fragment()).commit();
+    }
+
     public void update_UI(){
         tv_drawer_username.setText(s_username);
         tv_drawer_aliasname.setText(s_aliasname);
