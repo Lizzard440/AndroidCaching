@@ -52,6 +52,7 @@ public class profile_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(! ((MainActivity) getActivity()).is_user_present()){
+                    // Login or Register:
                     tv_username.setText("Lizzard440");
                     ((MainActivity) getActivity()).set_username("Lizzard440");
                     tv_aliasname.setText("Fabio Uceda Perona");
@@ -62,7 +63,11 @@ public class profile_fragment extends Fragment {
 
                     ((MainActivity) getActivity()).set_user_present(true);
                     // TODO replace Picture
+
+                    ((MainActivity) getActivity()).display_login_Screen();
+
                 } else{
+                    // Logout
                     tv_username.setText("Username");
                     ((MainActivity) getActivity()).set_username("username");
                     tv_aliasname.setText("Alias Name");
