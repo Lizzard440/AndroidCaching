@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int i_score;
     private boolean x_user_present;
 
+    // Firebase Variables
+    private FirebaseAuth mAuth;
+
     /**
      * onCreate gets called on App-Start
      * Code-Snippets by:
@@ -44,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         Log.v(TAG, "onCreate called");
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -165,5 +173,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void update_UI(){
         tv_drawer_username.setText(s_username);
         tv_drawer_aliasname.setText(s_aliasname);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        //
+        NavigationView navigation_view = findViewById(R.id.nav_view);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null)
+        {
+            // TODO: Wechsel zu profile_fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new profile_fragment()).commit();
+            navigation_view.setCheckedItem(R.id.nav_profile);
+        }
+
     }
 }
