@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class profile_fragment extends Fragment {
 
@@ -161,29 +166,54 @@ public class profile_fragment extends Fragment {
                         + "\nregister PW2:  " + register_pw2;
         Log.v(TAG, message);
         */
-        if(login_mail != null
-                && login_pw != null
-                && register_mail == null
-                && register_pw1 == null
-                && register_pw2 == null){
-            // attempt Login (call method from main activity)
-            Log.v(TAG, "login");
-            ((MainActivity) getActivity()).attempt_login(login_mail, login_pw);
-        }else if(login_mail == null
-                && login_pw == null
-                && register_mail != null
-                && register_pw1 != null
-                && register_pw2 != null){
-            // attempt Register (call method from main activity)
-            Log.v(TAG, "register");
-            if(register_pw1 == register_pw2){
-                ((MainActivity) getActivity()).attempt_register(register_mail, register_pw1);
-            } else{
-                // TODO Toast no equal Passwords entered
-            }
+        if(isEmailValid(login_mail) == true){
+            Log.v(TAG, "login Mail is a mail-address.");
+        }else{
+            Log.v(TAG, "login Mail is NOT a mail-address.");
+        }
 
+        if(TextUtils.isEmpty(login_mail)){
+            Log.v(TAG, "login Mail is empty.");
+        }else{
+            Log.v(TAG, "login Mail is NOT empty.");
+        }
+
+        if(isEmailValid(login_mail) == true
+                && TextUtils.isEmpty(login_pw) == false
+                && TextUtils.isEmpty(register_mail) == true
+                && TextUtils.isEmpty(register_pw1) == true
+                && TextUtils.isEmpty(register_pw2) == true){
+            // Go on to attempt login
+            Log.v(TAG, "attempt Login");
+            ((MainActivity) getActivity()).attempt_login(login_mail, login_pw);
+
+        } else if(TextUtils.isEmpty(login_mail) == true
+                && TextUtils.isEmpty(login_pw) == true
+                && isEmailValid(register_mail) == true
+                && TextUtils.isEmpty(register_pw1) == false
+                && TextUtils.isEmpty(register_pw2) == false){
+            // Go on to attempt register
+            Log.v(TAG, "attempt Register");
+            ((MainActivity) getActivity()).attempt_register(register_mail, register_pw1);
+        }else{
+            // Error Message
+            Toast.makeText(getContext(), "Please Enter valid Data for ONE option", Toast.LENGTH_LONG).show();
         }
 
         return 0;
+    }
+
+    /**
+     * method is used for checking valid email id format.
+     *
+     * @param email
+     * @return boolean true for valid false for invalid
+     * from: https://stackoverflow.com/questions/6119722/how-to-check-edittexts-text-is-email-address-or-not
+     */
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$"; // ???
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
