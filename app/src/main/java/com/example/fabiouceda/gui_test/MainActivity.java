@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * onCreate gets called on App-Start
      * Code-Snippets by:
      * - Coding in Flow (Youtube)
+     *
      * @param savedInstanceState
      */
     @Override
@@ -129,50 +133,113 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public String get_username(){
+    public String get_username() {
         return (s_username); // TODO replace with Variable Username
     }
 
-    public String get_aliasname(){
+    public String get_aliasname() {
         return (s_aliasname); // TODO replace with Variable Alias-Name
     }
 
-    public int get_score(){
+    public int get_score() {
         return (i_score); // TODO replace with Variable Score
     }
 
-    public boolean is_user_present(){
-        return(x_user_present);
+    public boolean is_user_present() {
+        return (x_user_present);
     }
 
-    public void set_user_present(boolean user_present_){
+    public void set_user_present(boolean user_present_) {
         x_user_present = user_present_;
     }
 
-    public void set_username(String username_){
+    public void set_username(String username_) {
         s_username = username_;
     }
 
-    public void set_aliasname(String aliasname_){
+    public void set_aliasname(String aliasname_) {
         s_aliasname = aliasname_;
     }
 
-    public void set_score(int score_){
+    public void set_score(int score_) {
         i_score = score_;
     }
 
-    public void attempt_login(String email, String password){}
+    public void attempt_login(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            update_UI(user);
+                        }
+                        /*else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                        */
+                    }
+                });
 
-    public void attempt_register(String email, String password){}
+    }
 
-    public void display_login_Screen(){
+    public void attempt_register(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            update_UI(user);
+                        } /*else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                        */
+
+                    }
+                });
+    }
+
+    public void logout_user() {
+        mAuth.signOut();
+        // TODO: Update UI
+        update_UI(null);
+    }
+
+    public void display_login_Screen() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new login_or_register_fragment()).commit();
     }
 
-    public void update_UI(){
+    public void update_UI() {
         tv_drawer_username.setText(s_username);
         tv_drawer_aliasname.setText(s_aliasname);
+    }
+
+    public void update_UI(FirebaseUser user) {
+        if(user != null)
+        {
+            tv_drawer_username.setText(user.getDisplayName());
+            tv_drawer_aliasname.setText(user.getEmail());
+        }
+        else
+        {
+            tv_drawer_username.setText(null);
+            tv_drawer_aliasname.setText(null);
+        }
+
     }
 
     @Override
@@ -183,8 +250,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //
         NavigationView navigation_view = findViewById(R.id.nav_view);
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null)
-        {
+        if (currentUser == null) {
             // TODO: Wechsel zu profile_fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new profile_fragment()).commit();
@@ -192,4 +258,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+
 }
+
+
+
+
+/*
+private void updateUI(FirebaseUser user) {
+
+        hideProgressDialog();
+
+        if (user != null) {
+
+            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
+
+                    user.getEmail(), user.isEmailVerified()));
+
+            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+
+
+
+            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
+
+            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
+
+            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
+
+
+
+            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+
+        } else {
+
+            mStatusTextView.setText(R.string.signed_out);
+
+            mDetailTextView.setText(null);
+
+
+
+            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
+
+            findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
+
+            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
+
+        }
+
+    }
+ */
