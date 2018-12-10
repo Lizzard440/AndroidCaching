@@ -115,6 +115,7 @@ public class profile_fragment extends Fragment {
                     ((MainActivity) getActivity()).set_score(0);
                     b_login_button.setText("Login or Register");
 
+                    ((MainActivity) getActivity()).logout_user();
                     ((MainActivity) getActivity()).set_user_present(false);
                     // TODO replace Picture
                 }
@@ -166,17 +167,6 @@ public class profile_fragment extends Fragment {
                         + "\nregister PW2:  " + register_pw2;
         Log.v(TAG, message);
         */
-        if(isEmailValid(login_mail) == true){
-            Log.v(TAG, "login Mail is a mail-address.");
-        }else{
-            Log.v(TAG, "login Mail is NOT a mail-address.");
-        }
-
-        if(TextUtils.isEmpty(login_mail)){
-            Log.v(TAG, "login Mail is empty.");
-        }else{
-            Log.v(TAG, "login Mail is NOT empty.");
-        }
 
         if(isEmailValid(login_mail) == true
                 && TextUtils.isEmpty(login_pw) == false
