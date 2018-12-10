@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "836742949526",
+    "firebase_url": "https://testprojekt-mo-fupkg.firebaseio.com",
+    "project_id": "testprojekt-mo-fupkg",
+    "storage_bucket": "testprojekt-mo-fupkg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836742949526:android:bb910f9b9c725836",
+        "android_client_info": {
+          "package_name": "com.example.fabiouceda.gui_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836742949526-8k8deh7qvlnj249t66m28ehvmp0u44vd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fabiouceda.gui_test",
+            "certificate_hash": "b4d5f63cc78aa5514fb8516b4e2d49e0ad0e1a94"
+          }
+        },
+        {
+          "client_id": "836742949526-fh01h37p66ejjqb5bfgon8h6m66v4pck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmyOjtzKpYElmNGzAK_w4abnilxQTW3Rg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836742949526-fh01h37p66ejjqb5bfgon8h6m66v4pck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
