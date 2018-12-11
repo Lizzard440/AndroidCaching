@@ -1,5 +1,9 @@
 package com.example.fabiouceda.gui_test;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String s_aliasname;
     private int i_score;
     private boolean x_user_present;
+    private int i_login_state;
+    private int i_register_state;
 
     // Firebase Variables
     private FirebaseAuth mAuth;
@@ -165,57 +171,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = score_;
     }
 
-    public void attempt_login(String email, String password) {
+    //TODO: mehrere Fehlercodes: 0:alles ok, 1:pw falsch, 2:Email falsch, 3:keine Verbindung, 4:sonstiges
+    // code sippets from firebase assistent
+    public int attempt_login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
+                            Log.v(TAG, "login attempt: success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             update_UI(user);
+                            i_login_state = 0;
                         }
-                        /*else {
+                        else
+                        {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Log.v(TAG, "login attempt: failure", task.getException());
+                            update_UI(null);
+                            i_login_state = 1;
                         }
-                        */
                     }
                 });
 
+        return i_login_state;
     }
 
-    public void attempt_register(String email, String password) {
+
+    //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
+    // code sippets from firebase assistent
+    public int attempt_register(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.v(TAG, "register attempt: success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             update_UI(user);
-                        } /*else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                        */
+                            i_register_state = 0;
 
+                        }
+                        else
+                        {
+                            // If sign in fails, display a message to the user.
+                            Log.v(TAG, "regigster attempt: failure", task.getException());
+                            update_UI(null);
+                            i_register_state = 1;
+                        }
                     }
                 });
+
+        return i_register_state;
     }
 
-    public void logout_user() {
+    public void logout_user()
+    {
         mAuth.signOut();
         // TODO: Update UI
         update_UI(null);
+        Log.v(TAG, "logout:success");
     }
 
     public void display_login_Screen() {
@@ -256,9 +273,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new profile_fragment()).commit();
             navigation_view.setCheckedItem(R.id.nav_profile);
         }
-
     }
 
+    public void Check_Connectivity() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isWifiConn = false;
+        boolean isMobileConn = false;
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                isWifiConn |= networkInfo.isConnected();
+            }
+            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                isMobileConn |= networkInfo.isConnected();
+            }
+        }
+        Log.d(TAG, "Wifi connected: " + isWifiConn);
+        Log.d(TAG, "Mobile connected: " + isMobileConn);
+    }
 
 }
 
