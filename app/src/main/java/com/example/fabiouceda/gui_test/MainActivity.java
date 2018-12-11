@@ -1,5 +1,6 @@
 package com.example.fabiouceda.gui_test;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -24,13 +26,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tv_drawer_username;
     private TextView tv_drawer_aliasname;
     private ImageView iv_drawer_profilepic;
+    private File saveFile;
 
-    // "Simple" Variables
+    // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
     private String s_username;
     private String s_aliasname;
+
     private int i_score;
+
     private boolean x_user_present;
+    private boolean x_only_use_wlan;
 
     /**
      * onCreate gets called on App-Start
@@ -41,9 +47,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // use Layout with Nav-Drawer
         setContentView(R.layout.activity_main);
 
-        Log.v(TAG, "onCreate called");
+        Log.v(TAG, "onCreate");
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -63,18 +70,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new play_random_fragment()).commit();
             navigation_view.setCheckedItem(R.id.nav_play);
-        } // Snippet End
+        }
+        View Head = navigation_view.getHeaderView(0);
+        // Snippet End
 
         s_username = "Lizzard440";
         s_aliasname = "Fabio Uceda Perona";
         i_score = 9999;
 
-        View Head = navigation_view.getHeaderView(0);
-
-        Head.findViewById(R.id.nav_head_username);
 
         tv_drawer_username = Head.findViewById(R.id.nav_head_username);
         tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
+        saveFile = new File(getApplicationContext().getFilesDir(), "savefile");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.v(TAG, "onStop");
+
+        try {
+            FileOutputStream outStream = openFileOutput("savefile", Context.MODE_PRIVATE);
+            // TODO save Data
+
+            outStream.close();
+        } catch (Exception exept) {
+            exept.printStackTrace();
+        }
+        super.onStop();
     }
 
     @Override
@@ -121,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+
     public String get_username(){
         return (s_username); // TODO replace with Variable Username
     }
@@ -153,13 +177,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = score_;
     }
 
-    public void attempt_login(String email, String password){}
+    // Database Communication
 
-    public void attempt_register(String email, String password){}
+    public void attempt_login(String email, String password){// TODO Implement Error Variable!!!
+        Log.v(TAG, "Try to Login\ne-Mail: " + email + "\nPW:     " + password);
+    }
 
-    public void display_login_Screen(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new login_or_register_fragment()).commit();
+    public void attempt_register(String email, String password){// TODO Implement Error Variable!!!
+        Log.v(TAG, "Try to Register\ne-Mail: " + email + "\nPW:     " + password);
+    }
+
+    public void logout_user(){
+        if (is_user_present()){
+            // TODO implement lodout code
+        } else{
+            Log.v(TAG, "Logout while no user present");
+        }
     }
 
     public void update_UI(){
