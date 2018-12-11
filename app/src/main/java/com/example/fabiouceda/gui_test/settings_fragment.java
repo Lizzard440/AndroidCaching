@@ -7,13 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 
 public class settings_fragment extends Fragment {
 
     private Button b_help;
+    private Switch sw_only_Wlan;
 
     private final String TAG = "TAG1_SETT_FRAG";
 
@@ -35,6 +38,9 @@ public class settings_fragment extends Fragment {
                 instruction_window.create().show();
             }
         });
+
+        sw_only_Wlan = (Switch) v_settings_fragment.findViewById(R.id.use_only_wlan_switch);
+        sw_only_Wlan.isChecked();
 
         return v_settings_fragment;
     }

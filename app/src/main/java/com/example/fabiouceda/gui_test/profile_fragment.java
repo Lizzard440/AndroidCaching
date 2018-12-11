@@ -130,7 +130,8 @@ public class profile_fragment extends Fragment {
                 AlertDialog.Builder instruction_window = new AlertDialog.Builder(getActivity());
                 instruction_window.setPositiveButton("understand...", null);
                 instruction_window.setTitle("Help");
-                instruction_window.setMessage("Manage your Account, or play offline\n(Note: no Scoreboard offline)");
+                instruction_window.setMessage("Manage your Account, or play offline\n" +
+                        "In login-screen you may only enter your information for the desired action.");
                 instruction_window.create().show();
             }
         });

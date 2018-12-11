@@ -2,8 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:layout_editor_absoluteX="1dp"
     tools:layout_editor_absoluteY="4dp">
@@ -11,68 +11,70 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="20sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="Login"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/login_eMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="eMail Address" />
+        android:hint="eMail Address"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/login_PW"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:textSize="20sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingTop="15dp"/>
+        android:paddingTop="15dp"
+        android:text="Register"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/register_eMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="eMail Address" />
+        android:hint="eMail Address"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/register_PW1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <EditText
         android:id="@+id/register_PW2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="repeat Password"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/login_submit_button"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:ems="10"
+        android:hint="repeat Password"
+        android:inputType="textPassword" />
 
 </LinearLayout>
