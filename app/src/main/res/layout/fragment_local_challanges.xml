@@ -35,18 +35,18 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_1"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_2"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_3"/>
 
         </LinearLayout>
@@ -59,18 +59,18 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_4"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_5"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_6"/>
 
         </LinearLayout>
@@ -83,18 +83,18 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_7"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_8"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_9"/>
 
         </LinearLayout>
@@ -107,18 +107,18 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_10"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_11"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_64dp"
+                android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Challange_12"/>
 
         </LinearLayout>
