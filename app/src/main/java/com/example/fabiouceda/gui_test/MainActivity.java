@@ -171,60 +171,64 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = score_;
     }
 
-    //TODO: mehrere Fehlercodes: 0:alles ok, 1:pw falsch, 2:Email falsch, 3:keine Verbindung, 4:sonstiges
+    //TODO: mehrere Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.v(TAG, "login attempt: success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            update_UI(user);
-                            i_login_state = 0;
-                        }
-                        else
-                        {
-                            // If sign in fails, display a message to the user.
-                            Log.v(TAG, "login attempt: failure", task.getException());
-                            update_UI(null);
-                            i_login_state = 1;
-                        }
-                    }
-                });
+       if(Check_Connectivity() < 3) {
+           mAuth.signInWithEmailAndPassword(email, password)
+                   .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                       @Override
+                       public void onComplete(@NonNull Task<AuthResult> task) {
+                           if (task.isSuccessful()) {
+                               // Sign in success, update UI with the signed-in user's information
+                               Log.v(TAG, "login attempt: success");
+                               FirebaseUser user = mAuth.getCurrentUser();
+                               update_UI(user);
+                               i_login_state = 0;
+                           } else {
+                               // If sign in fails, display a message to the user.
+                               Log.v(TAG, "login attempt: failure", task.getException());
+                               update_UI(null);
+                               i_login_state = 2;
+                           }
+                       }
+                   });
+           return i_login_state;
+       }
+       else
+           return 1;
 
-        return i_login_state;
     }
 
 
     //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_register(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.v(TAG, "register attempt: success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            update_UI(user);
-                            i_register_state = 0;
+        // Check if the mobile is connected to network
+        if(Check_Connectivity() < 3) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.v(TAG, "register attempt: success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                update_UI(user);
+                                i_register_state = 0;
 
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.v(TAG, "regigster attempt: failure", task.getException());
+                                update_UI(null);
+                                i_register_state = 2;
+                            }
                         }
-                        else
-                        {
-                            // If sign in fails, display a message to the user.
-                            Log.v(TAG, "regigster attempt: failure", task.getException());
-                            update_UI(null);
-                            i_register_state = 1;
-                        }
-                    }
-                });
-
-        return i_register_state;
+                    });
+            return i_register_state;
+        }
+        else
+            return 1;
     }
 
     public void logout_user()
@@ -235,10 +239,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(TAG, "logout:success");
     }
 
-    public void display_login_Screen() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new login_or_register_fragment()).commit();
-    }
 
     public void update_UI() {
         tv_drawer_username.setText(s_username);
@@ -272,10 +272,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new profile_fragment()).commit();
             navigation_view.setCheckedItem(R.id.nav_profile);
+
         }
     }
 
-    public void Check_Connectivity() {
+    // method from Android Studio Devolopers website
+    // returncodes: 0: Wifi + Mobile connected
+    //              1: Only Wifi connected
+    //              2: Only Mobile connected
+    //              3: Nothing connected
+    public int Check_Connectivity() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isWifiConn = false;
@@ -289,8 +295,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isMobileConn |= networkInfo.isConnected();
             }
         }
-        Log.d(TAG, "Wifi connected: " + isWifiConn);
-        Log.d(TAG, "Mobile connected: " + isMobileConn);
+        Log.v(TAG, "Wifi connected: " + isWifiConn);
+        Log.v(TAG, "Mobile connected: " + isMobileConn);
+
+        if(isWifiConn && isMobileConn) {
+            return 0;
+        }
+        else if((isWifiConn == true) && (isMobileConn == false)) {
+            return 1;
+        }
+        else if((isWifiConn == false) && (isMobileConn == true)) {
+            return 2;
+        }
+        else
+            return 3;
     }
 
 }
