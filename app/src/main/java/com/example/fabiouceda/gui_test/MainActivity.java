@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+
 import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -175,27 +176,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return (s_aliasname); // TODO replace with Variable Alias-Name
     }
 
-    public int get_score() {
+    public int get_score(){
         return (i_score); // TODO replace with Variable Score
     }
 
-    public boolean is_user_present() {
-        return (x_user_present);
+    public boolean is_user_present(){
+        return(x_user_present);
     }
 
-    public void set_user_present(boolean user_present_) {
+    public void set_user_present(boolean user_present_){
         x_user_present = user_present_;
     }
 
-    public void set_username(String username_) {
+    public void set_username(String username_){
         s_username = username_;
     }
 
-    public void set_aliasname(String aliasname_) {
+    public void set_aliasname(String aliasname_){
         s_aliasname = aliasname_;
     }
 
-    public void set_score(int score_) {
+    public void set_score(int score_){
         i_score = score_;
     }
 
@@ -265,13 +266,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth.signOut();
         // TODO: Update UI
         update_UI(null);
-        Log.v(TAG, "logout:success");
     }
 
-
-    public void update_UI() {
-        tv_drawer_username.setText(s_username);
-        tv_drawer_aliasname.setText(s_aliasname);
+    public void update_UI(){
+        Log.v(TAG, "logout:success");
     }
 
     public void update_UI(FirebaseUser user) {
@@ -287,6 +285,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    public String get_username_from_DB(){
+        Log.v(TAG, "get username from DB");
+        // TODO fill Method
+        return "Username";
+    }
+
+    public String get_aliasname_from_DB(){
+        Log.v(TAG, "get aliasname from DB");
+        // TODO fill Method (aliasname = e-mail address)
+        return "mail@example.com";
+    }
+
+    public int get_score_from_DB(){
+        Log.v(TAG, "get user score from DB");
+        // TODO fill Method (aliasname = e-mail address)
+        return 0;
+    }
+
+
 
     @Override
     protected void onStart() {
