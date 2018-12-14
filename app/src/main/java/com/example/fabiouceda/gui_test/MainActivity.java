@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tv_drawer_username;
     private TextView tv_drawer_aliasname;
     private ImageView iv_drawer_profilepic;
-    private File saveSettingsFile;
+    private File saveSettingsFile; // storing settings & co.
     private acUser androidCachingUser; // contains FB user and additional information
 
     // primitive Variables
