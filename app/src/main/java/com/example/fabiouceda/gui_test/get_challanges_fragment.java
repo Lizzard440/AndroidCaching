@@ -1,5 +1,11 @@
 package com.example.fabiouceda.gui_test;
 
+/**
+ * inflates layout and contains basic functionality
+ * everything else is fetched from the MainActivity
+ * Created by: Fabio
+ */
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

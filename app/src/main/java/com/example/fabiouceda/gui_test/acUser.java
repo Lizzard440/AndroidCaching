@@ -3,6 +3,7 @@ package com.example.fabiouceda.gui_test;
 /*
 * This Class contains additional information about the user in addition to an instance of
 * FirebaseUser ti store the corresponding object.
+* Created by: Fabio
 */
 
 import com.google.firebase.auth.FirebaseUser;

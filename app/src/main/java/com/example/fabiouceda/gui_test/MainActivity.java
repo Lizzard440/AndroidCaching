@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tv_drawer_username;
     private TextView tv_drawer_aliasname;
     private ImageView iv_drawer_profilepic;
-    private File saveFile;
+    private File saveSettingsFile;
+    private acUser androidCachingUser; // contains FB user and additional information
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * onCreate gets called on App-Start
+     * Created by: Fabio
      * Code-Snippets by:
      * - Coding in Flow (Youtube)
      * @param savedInstanceState
@@ -103,13 +105,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         tv_drawer_username = Head.findViewById(R.id.nav_head_username);
         tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
-        saveFile = new File(getApplicationContext().getFilesDir(), "savefile");
+        saveSettingsFile = new File(getApplicationContext().getFilesDir(), "savefile");
     }
 
+    /**
+     * saving Data to internal App-Storage
+     * Created by: Fabio
+     * saving data example by android developer
+     */
     @Override
     protected void onStop() {
         Log.v(TAG, "onStop");
 
+            // example from android developer reference
         try {
             FileOutputStream outStream = openFileOutput("savefile", Context.MODE_PRIVATE);
             // TODO save Data
@@ -123,6 +131,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
     }
 
+    /**
+     * Evaluates wich navigation item had been selected
+     * Created by: Fabio
+     * Code Snippet by Coding in flow (edited to fit our needs)
+     * @param menuItem
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Log.v(TAG, "onNavigationItemSelected called");
@@ -166,6 +181,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Makes sure that the Drawer gets closed if it is open and "back" gets pressed
+     * Created by: Fabio
+     * Code snippet by coding in flow
+     */
     @Override
     public void onBackPressed() {
         Log.v(TAG, "onBackPressed called");
@@ -176,6 +196,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Takes photo and saves it to an image file for later evaluation
+     * Created by: Fabio
+     * Code example by android developer reference
+     */
     public void take_photo(){
         // TODO get Photo with intent
         if ( true /*hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)*/){
@@ -187,6 +212,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Evaluates intent results
+     * Checking for capture Image was successful
+     * Created by: Fabio
+     * Code example by android developer
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQ_IMAGE_CAPTURE && resultCode == RESULT_OK){
@@ -194,6 +228,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Bitmap imageBmp = (Bitmap) extras.get("data");
             // Save Image to local Storage
         }
+    }
+
+    /**
+     * Count out how many Challanges exist in the local storage.
+     * Created by: Fabio
+     * @return
+     */
+    public short count_local_challanges(){
+        // TODO Implement Method, that counts the amount of downloaded challanges
+        return 0;
     }
 
     public String get_username(){
@@ -232,6 +276,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = score_;
     }
 
+    /**
+     * Attempt login and return value whether or not it was successful
+     * Created by: Kevin
+     * Code example by FireBase Assistent
+     * @param email
+     * @param password
+     * @return
+     */
     //TODO: mehrere Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
@@ -262,10 +314,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     // Database Communication
 
-
+    /**
+     * Attempt registering new user and return value whether or not it was successful
+     * Created by: Kevin
+     * Code example by FireBase Assistent
+     * @param email
+     * @param password
+     * @return
+     */
     //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
-    public int attempt_register(String email, String password) {
+    public int attempt_register(String email, String password, String username) {
         // Check if the mobile is connected to network
         if(Check_Connectivity() < 3) {
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -293,6 +352,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return 1;
     }
 
+    /**
+     * Logging out user
+     * Created by: Kevin
+     * Code by Firebase Assistent
+     */
     public void logout_user()
     {
         mAuth.signOut();
@@ -304,6 +368,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(TAG, "logout:success");
     }
 
+    /**
+     * Updating UI with user information from DB
+     * Created by: Kevin
+     * @param user
+     */
     public void update_UI(FirebaseUser user) {
         if(user != null)
         {
@@ -336,13 +405,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return 0;
     }
 
-
-
+    /**
+     * Loading presets for Firebase user
+     * Created by: Kevin
+     */
     @Override
     protected void onStart() {
         super.onStart();
-
-
         //
         NavigationView navigation_view = findViewById(R.id.nav_view);
         FirebaseUser currentUser = mAuth.getCurrentUser();

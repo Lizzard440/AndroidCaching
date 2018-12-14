@@ -1,5 +1,9 @@
 package com.example.fabiouceda.gui_test;
-
+/**
+ * inflates layout and contains basic functionality
+ * everything else is fetched from the MainActivity
+ * Created by: Fabio
+ */
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -34,6 +38,7 @@ public class profile_fragment extends Fragment {
     private String login_mail;
     private String login_pw;
     private String register_mail;
+    private String register_username;
     private String register_pw1;
     private String register_pw2;
 
@@ -140,17 +145,20 @@ public class profile_fragment extends Fragment {
     }
 
     private void grab_login_screen_content(View v_login_window){
-        login_mail    = null;
-        login_pw      = null;
-        register_mail = null;
-        register_pw1  = null;
-        register_pw2  = null;
+        login_mail          = null;
+        login_pw            = null;
+        register_mail       = null;
+        register_username   = null;
+        register_pw1        = null;
+        register_pw2        = null;
         EditText et_contentgrabber = (EditText) v_login_window.findViewById(R.id.login_eMail);
         login_mail = et_contentgrabber.getText().toString();
         et_contentgrabber = (EditText) v_login_window.findViewById(R.id.login_PW);
         login_pw = et_contentgrabber.getText().toString();
         et_contentgrabber = (EditText) v_login_window.findViewById(R.id.register_eMail);
         register_mail = et_contentgrabber.getText().toString();
+        et_contentgrabber = (EditText) v_login_window.findViewById(R.id.register_username);
+        register_username = et_contentgrabber.getText().toString();
         et_contentgrabber = (EditText) v_login_window.findViewById(R.id.register_PW1);
         register_pw1 = et_contentgrabber.getText().toString();
         et_contentgrabber = (EditText) v_login_window.findViewById(R.id.register_PW2);
@@ -171,6 +179,7 @@ public class profile_fragment extends Fragment {
         if(isEmailValid(login_mail) == true
                 && TextUtils.isEmpty(login_pw) == false
                 && TextUtils.isEmpty(register_mail) == true
+                && TextUtils.isEmpty(register_username) == true
                 && TextUtils.isEmpty(register_pw1) == true
                 && TextUtils.isEmpty(register_pw2) == true){
             // Go on to attempt login
@@ -181,10 +190,11 @@ public class profile_fragment extends Fragment {
                 && TextUtils.isEmpty(login_pw) == true
                 && isEmailValid(register_mail) == true
                 && TextUtils.isEmpty(register_pw1) == false
-                && TextUtils.isEmpty(register_pw2) == false){
+                && TextUtils.isEmpty(register_username) == false
+                && register_pw1 == register_pw2){
             // Go on to attempt register
             Log.v(TAG, "attempt Register");
-            ((MainActivity) getActivity()).attempt_register(register_mail, register_pw1);
+            ((MainActivity) getActivity()).attempt_register(register_mail, register_pw1, register_username);
         }else{
             // Error Message
             Toast.makeText(getContext(), "Please Enter valid Data for ONE option", Toast.LENGTH_LONG).show();
