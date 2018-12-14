@@ -31,7 +31,7 @@ public class play_random_fragment extends Fragment {
                 AlertDialog.Builder instruction_window = new AlertDialog.Builder(getActivity());
                 instruction_window.setPositiveButton("copy that.", null);
                 instruction_window.setTitle("Help");
-                instruction_window.setMessage("Play a random selected challange from your local storage");
+                instruction_window.setMessage(R.string.help_in_play_random);
                 instruction_window.create().show();
             }
         });

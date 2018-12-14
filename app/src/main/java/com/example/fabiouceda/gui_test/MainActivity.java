@@ -1,11 +1,15 @@
 package com.example.fabiouceda.gui_test;
 
 import android.content.Context;
-import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,8 +30,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -45,11 +47,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String s_username;
     private String s_aliasname;
 
+    static final int REQ_IMAGE_CAPTURE = 1;
     private int i_score;
-
-    private boolean x_user_present;
     private int i_login_state;
     private int i_register_state;
+
+    private boolean x_user_present;
     private boolean x_only_use_wlan;
 
     // Firebase Variables
@@ -137,15 +140,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new local_challanges_fragment()).commit();
                 break;
             case R.id.nav_browse_challanges:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                if(x_only_use_wlan == false
+                        ||(x_only_use_wlan == true
+                        &&    Check_Connectivity() <= 1)){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new get_challanges_fragment()).commit();
+                }else{
+                    Toast.makeText(this, "Check your WiFi Connection",
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new settings_fragment()).commit();
                 break;
             case R.id.nav_update_with_DB:
-                Toast.makeText(this, "I have to sync now!!! leave me alone!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "I have to sync now!!! leave me alone!!!",
+                        Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -166,6 +178,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void take_photo(){
         // TODO get Photo with intent
+        if ( true /*hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)*/){
+            // If Camera is existent
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+                startActivityForResult(takePictureIntent, REQ_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQ_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBmp = (Bitmap) extras.get("data");
+            // Save Image to local Storage
+        }
     }
 
     public String get_username(){
@@ -182,6 +210,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public boolean is_user_present(){
         return(x_user_present);
+    }
+
+    public void set_only_use_wlan(boolean value){
+        x_only_use_wlan = value;
     }
 
     public void set_user_present(boolean user_present_){

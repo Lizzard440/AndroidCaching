@@ -3,4 +3,10 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#d81b60</color>
+
+    <color name="default_bg_color">#00574B</color>
+    <color name="locals_challanges_bg">#ffaa00</color>
+    <color name="profile_bg">#008577</color>
+    <color name="Play_bg">#666666</color>
+    <color name="Settings_bg">#ffffcc</color>
 </resources>

@@ -31,7 +31,7 @@ public class get_challanges_fragment extends Fragment {
                 AlertDialog.Builder instruction_window = new AlertDialog.Builder(getActivity());
                 instruction_window.setPositiveButton("if you say so", null);
                 instruction_window.setTitle("Help");
-                instruction_window.setMessage("Browse challanges in your local area");
+                instruction_window.setMessage(R.string.help_in_browse_challanges);
                 instruction_window.create().show();
             }
         });

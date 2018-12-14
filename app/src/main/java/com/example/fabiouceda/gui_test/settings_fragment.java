@@ -34,13 +34,13 @@ public class settings_fragment extends Fragment {
                 AlertDialog.Builder instruction_window = new AlertDialog.Builder(getActivity());
                 instruction_window.setPositiveButton("got it!", null);
                 instruction_window.setTitle("Help");
-                instruction_window.setMessage("Make some adjustments like Radius for displayd challanges");
+                instruction_window.setMessage(R.string.help_in_settings);
                 instruction_window.create().show();
             }
         });
 
         sw_only_Wlan = (Switch) v_settings_fragment.findViewById(R.id.use_only_wlan_switch);
-        sw_only_Wlan.isChecked();
+        ((MainActivity)getActivity()).set_only_use_wlan(sw_only_Wlan.isChecked());
 
         return v_settings_fragment;
     }

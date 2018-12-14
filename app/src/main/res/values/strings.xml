@@ -1,5 +1,40 @@
 <resources>
-    <string name="app_name">GUI_Test</string>
+    <string name="app_name">Android-Caching</string>
+
+    <!-- Used for opening and closing the drawer. DO NOT CHANGE!!! -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Set Values for the Case, that no User is logged in -->
+    <string name="no_user_username">username</string>
+    <string name="no_user_aliasname">aliasname</string>
+    <string name="no_user_score">0</string>
+
+    <!-- Messages for Help Displays -->
+    <string name="help_in_profile">
+        Manage your Account, or play offline. \n
+        In login-screen you may only enter your information for the desired action.</string>
+    <string name="help_in_play_random">
+        Choses a random challange from your local challanges for you to tackle\n
+        or\nYou landed here because you selected a specific challange from your local stash</string>
+    <string name="help_in_local_challanges">
+        See all your downloaded challanges nicely listed.</string>
+    <string name="help_in_browse_challanges">
+        Get new and exciting challanges, uploaded to our database by other users</string>
+    <string name="help_in_settings">
+        Do I realy need to explain what "Settings" are?!</string>
+    <!--  -->
+
+    <!-- Labels for NavigationDrawer -->
+    <string name="nav_drawer_profile"   >My Profile</string>
+    <string name="nav_drawer_play"      >Play Random Local</string>
+    <string name="nav_drawer_locals"    >Local Challanges</string>
+    <string name="nav_drawer_browse"    >Browse Challanges</string>
+    <string name="nav_drawer_settings"  >Settings</string>
+    <string name="nav_drawer_sync"      >Sync. with DB</string>
+
+    <!-- displayed Error messages -->
+    <string name="wrong_pw_toast">Wrong password!</string>
+    <string name="check_connection_toast">enable  Internet-connection!</string>
+
 </resources>
