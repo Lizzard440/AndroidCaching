@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Firebase Variables
     private FirebaseAuth mAuth;
+    /*
+     private FirebaseFirestore db;
+     */
+
 
     /**
      * onCreate gets called on App-Start
@@ -75,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(TAG, "onCreate");
 
         mAuth = FirebaseAuth.getInstance();
+        /*
+        db = FirebaseFirestore.getInstance();
+         */
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -287,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO: mehrere Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
-       if(Check_Connectivity() < 3) {
+       if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))){
            mAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                        @Override
@@ -326,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // code sippets from firebase assistent
     public int attempt_register(String email, String password, String username) {
         // Check if the mobile is connected to network
-        if(Check_Connectivity() < 3) {
+        if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -424,11 +431,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // method from Android Studio Devolopers website
-    // returncodes: 0: Wifi + Mobile connected
-    //              1: Only Wifi connected
-    //              2: Only Mobile connected
-    //              3: Nothing connected
+    /**
+     *  method from Android Studio Devolopers website
+     *  Created by: Kevin
+     *  Code snippets from Android-Developer
+     *  returncodes:    0: Wifi + Mobile connected
+     *                  1: Only Wifi connected
+     *                  2: Only Mobile connected
+     *                  3: Nothing connected
+     */
     public int Check_Connectivity() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -449,10 +460,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(isWifiConn && isMobileConn) {
             return 0;
         }
-        else if((isWifiConn == true) && (isMobileConn == false)) {
+        else if(isWifiConn && !isMobileConn) {
             return 1;
         }
-        else if((isWifiConn == false) && (isMobileConn == true)) {
+        else if(!isWifiConn && isMobileConn) {
             return 2;
         }
         else
