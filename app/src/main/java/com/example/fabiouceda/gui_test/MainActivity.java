@@ -42,7 +42,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -50,9 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Objects
     private TextView tv_drawer_username;
     private TextView tv_drawer_aliasname;
-    private ImageView iv_drawer_profilepic;
-    private File saveSettingsFile; // storing settings & co.
-    private acUser androidCachingUser; // contains FB user and additional information
     private LocationManager locManager;
     private LocationListener locListener;
     private SharedPreferences sharedPref;
