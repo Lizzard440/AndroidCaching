@@ -254,13 +254,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return 0;
     }
 
-    public String get_username(){
-        return (s_username); // TODO replace with Variable Username
-    }
-
-    public String get_aliasname(){
-        return (s_aliasname); // TODO replace with Variable Alias-Name
-    }
 
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
@@ -276,14 +269,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void set_user_present(boolean user_present_){
         x_user_present = user_present_;
-    }
-
-    public void set_username(String username_){
-        s_username = username_;
-    }
-
-    public void set_aliasname(String aliasname_){
-        s_aliasname = aliasname_;
     }
 
     public void set_score(int score_){
