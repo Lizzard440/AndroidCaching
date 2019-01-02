@@ -25,10 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Firebase Variables
     private FirebaseAuth mAuth;
-    /*
-     private FirebaseFirestore db;
-     */
+
+    private FirebaseFirestore db;
+
 
 
     /**
@@ -79,9 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(TAG, "onCreate");
 
         mAuth = FirebaseAuth.getInstance();
-        /*
+
         db = FirebaseFirestore.getInstance();
-         */
+
+        androidCachingUser = new acUser();
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -291,7 +298,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param password
      * @return
      */
-    //TODO: mehrere Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
        if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))){
@@ -329,9 +335,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param password
      * @return
      */
-    //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_register(String email, String password, String username) {
+        // set username
+        androidCachingUser.setUsername(s_username);
+
         // Check if the mobile is connected to network
         if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))) {
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -341,11 +349,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.v(TAG, "register attempt: success");
+                                x_user_present = true;
+
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 update_UI(user);
+
+                                // set UserID
+                                androidCachingUser.setUser_ID(user.getUid());
+                                // set eMail
+                                androidCachingUser.seteMail(user.getEmail());
+
+                                UploadInDB(androidCachingUser);
+
                                 i_register_state = 0;
 
-                            } else {
+                            }
+
+                            else {
                                 // If sign in fails, display a message to the user.
                                 Log.v(TAG, "regigster attempt: failure", task.getException());
                                 update_UI(null);
@@ -367,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void logout_user()
     {
         mAuth.signOut();
-        // TODO: Update UI
+        x_user_present = false;
         update_UI(null);
     }
 
@@ -394,23 +414,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public String get_username_from_DB(){
-        Log.v(TAG, "get username from DB");
-        // TODO fill Method
-        return "Username";
-    }
-
-    public String get_aliasname_from_DB(){
-        Log.v(TAG, "get aliasname from DB");
-        // TODO fill Method (aliasname = e-mail address)
-        return "mail@example.com";
-    }
-
-    public int get_score_from_DB(){
-        Log.v(TAG, "get user score from DB");
-        // TODO fill Method (aliasname = e-mail address)
-        return 0;
-    }
 
     /**
      * Loading presets for Firebase user
@@ -468,6 +471,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else
             return 3;
+    }
+
+    /**
+     * method to upload user data into database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     * @param user
+     */
+    public void UploadInDB(acUser user) {
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.v(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.v(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    /**
+     * method to read data from database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     */
+    public void ReadFromDB() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.v(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
 }

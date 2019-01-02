@@ -15,18 +15,6 @@ public class acUser  {
     private String user_ID;
     private String eMail;
 
-    private void extractData (){
-        user_ID = fb_user.getUid();
-        eMail = fb_user.getEmail();
-    }
-
-    public FirebaseUser getFb_user() {
-        return fb_user;
-    }
-
-    public void setFb_user(FirebaseUser fb_user) {
-        this.fb_user = fb_user;
-    }
 
     public String getUsername() {
         return username;

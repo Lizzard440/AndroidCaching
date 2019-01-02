@@ -45,7 +45,7 @@ dependencies {
      * Fehler: "Could not resolve com.google.firebase:firebase-firestore:17.0.1
      * Konnte trotz ausgiebiger Recherche nicht behoben werden.
      */
-    //implementation 'com.google.firebase:firebase-firestore:17.0.1'
+    implementation 'com.google.firebase:firebase-firestore:17.0.1'
 
 }
 
