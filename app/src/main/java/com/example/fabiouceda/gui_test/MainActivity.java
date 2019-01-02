@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Firebase Variables
     private FirebaseAuth mAuth;
-
     private FirebaseFirestore db;
 
 
@@ -304,6 +303,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
     }
+
+    public String get_username() { return (s_username);}
+
+    public String get_aliasname() { return (s_aliasname);}
 
     public boolean is_user_present(){
         return(x_user_present);
