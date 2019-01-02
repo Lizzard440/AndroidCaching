@@ -18,6 +18,16 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
@@ -29,6 +39,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
+
+    /**
+     * Beim Einfügen nachfolgender Zeile (Einbinden der Datenbank) entsteht der
+     * Fehler: "Could not resolve com.google.firebase:firebase-firestore:17.0.1
+     * Konnte trotz ausgiebiger Recherche nicht behoben werden.
+     */
+    implementation 'com.google.firebase:firebase-firestore:17.0.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

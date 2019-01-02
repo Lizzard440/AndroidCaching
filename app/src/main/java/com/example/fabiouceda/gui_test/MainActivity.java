@@ -36,10 +36,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 
@@ -52,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LocationManager locManager;
     private LocationListener locListener;
     private SharedPreferences sharedPref;
+    private acUser androidCachingUser;
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -70,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Firebase Variables
     private FirebaseAuth mAuth;
 
+    private FirebaseFirestore db;
+
+
+
     /**
      * onCreate gets called on App-Start
      * Created by: Fabio
@@ -86,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.v(TAG, "onCreate");
 
         mAuth = FirebaseAuth.getInstance();
+
+        db = FirebaseFirestore.getInstance();
+
+        androidCachingUser = new acUser();
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -285,13 +300,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return 0;
     }
 
-    public String get_username(){
-        return (s_username); // TODO replace with Variable Username
-    }
-
-    public String get_aliasname(){
-        return (s_aliasname); // TODO replace with Variable Alias-Name
-    }
 
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
@@ -314,14 +322,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         x_user_present = user_present_;
     }
 
-    public void set_username(String username_){
-        s_username = username_;
-    }
-
-    public void set_aliasname(String aliasname_){
-        s_aliasname = aliasname_;
-    }
-
     public void set_score(int score_){
         i_score = score_;
     }
@@ -334,10 +334,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param password
      * @return
      */
-    //TODO: mehrere Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
-       if(Check_Connectivity() < 3) {
+       if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))){
            mAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                        @Override
@@ -375,8 +374,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_register(String email, String password, String username) {
+        // set username
+        androidCachingUser.setUsername(s_username);
+
         // Check if the mobile is connected to network
-        if(Check_Connectivity() < 3) {
+        if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -384,11 +386,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.v(TAG, "register attempt: success");
+                                x_user_present = true;
+
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 update_UI(user);
+
+                                // set UserID
+                                androidCachingUser.setUser_ID(user.getUid());
+                                // set eMail
+                                androidCachingUser.seteMail(user.getEmail());
+
+                                UploadInDB(androidCachingUser);
+
                                 i_register_state = 0;
 
-                            } else {
+                            }
+
+                            else {
                                 // If sign in fails, display a message to the user.
                                 Log.v(TAG, "regigster attempt: failure", task.getException());
                                 update_UI(null);
@@ -410,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void logout_user()
     {
         mAuth.signOut();
-        // TODO: Update UI
+        x_user_present = false;
         update_UI(null);
         s_username = getString(R.string.no_user_username);
         s_aliasname = getString(R.string.no_user_aliasname);
@@ -463,11 +477,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // TODO Laden von sharedPreferences
     }
 
-    // method from Android Studio Devolopers website
-    // returncodes: 0: Wifi + Mobile connected
-    //              1: Only Wifi connected
-    //              2: Only Mobile connected
-    //              3: Nothing connected
+    /**
+     *  method from Android Studio Devolopers website
+     *  Created by: Kevin
+     *  Code snippets from Android-Developer
+     *  returncodes:    0: Wifi + Mobile connected
+     *                  1: Only Wifi connected
+     *                  2: Only Mobile connected
+     *                  3: Nothing connected
+     */
     public int Check_Connectivity() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -488,16 +506,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(isWifiConn && isMobileConn) {
             return 0;
         }
-        else if((isWifiConn == true) && (isMobileConn == false)) {
+        else if(isWifiConn && !isMobileConn) {
             return 1;
         }
-        else if((isWifiConn == false) && (isMobileConn == true)) {
+        else if(!isWifiConn && isMobileConn) {
             return 2;
         }
         else
             return 3;
     }
 
+    /**
+     * method to upload user data into database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     * @param user
+     */
+    public void UploadInDB(acUser user) {
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.v(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.v(TAG, "Error adding document", e);
+                    }
+                });
+    }
     /**
      * Save local data to shared preferences
      * Created by: Fabio
@@ -528,51 +568,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Integer.parseInt(getString(R.string.no_user_score))); // default value
         x_user_present = sharedPref.getBoolean(getString(R.string.ac_user_present), false);
     }
-}// End of main Activity
 
 
 
 
-/*
-private void updateUI(FirebaseUser user) {
-
-        hideProgressDialog();
-
-        if (user != null) {
-
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-
-                    user.getEmail(), user.isEmailVerified()));
-
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-
-
-            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-
-            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
-
-            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-
-
-
-            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
-
-        } else {
-
-            mStatusTextView.setText(R.string.signed_out);
-
-            mDetailTextView.setText(null);
-
-
-
-            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
-
-            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-
-        }
-
+    /**
+     * method to read data from database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     */
+    public void ReadFromDB() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.v(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
- */
+
+}
