@@ -1,9 +1,19 @@
 package com.example.fabiouceda.gui_test;
 
+/*
+ * Position mit location manager und location listener
+ * Daten speichern mit sharedPreferences
+ * */
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -11,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView iv_drawer_profilepic;
     private File saveSettingsFile;
     private acUser androidCachingUser; // contains FB user and additional information
+    private LocationManager locManager;
+    private LocationListener locListener;
+    private SharedPreferences sharedPref;
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -55,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean x_user_present;
     private boolean x_only_use_wlan;
+    private boolean x_gps_permission_granted;
 
     // Firebase Variables
     private FirebaseAuth mAuth;
@@ -96,16 +111,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation_view.setCheckedItem(R.id.nav_play);
         }
         View Head = navigation_view.getHeaderView(0);
-        // Snippet End
+        // end of Code-Snippet
 
-        s_username = "Lizzard440";
-        s_aliasname = "Fabio Uceda Perona";
-        i_score = 9999;
+        sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
+        read_Settings(); // restore saved settings from shared Preferences
 
         tv_drawer_username = Head.findViewById(R.id.nav_head_username);
         tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
-        saveSettingsFile = new File(getApplicationContext().getFilesDir(), "savefile");
+
+        locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.v(TAG, "Location changed");
+                Log.v(TAG, "Lat:  " + String.valueOf(location.getLatitude()));
+                Log.v(TAG, "Long: " + String.valueOf(location.getLongitude()));
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.v(TAG, "Status changed");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.v(TAG, "Provider enabled");
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.v(TAG, "Provider disabled");
+            }
+        };
+
+        //Registering the listener with the Location-Manager to receive updates
+        // of cause after checking for permission
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            x_gps_permission_granted = false;
+            return;
+        }
+        x_gps_permission_granted = true;
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+
+
     }
 
     /**
@@ -116,20 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         Log.v(TAG, "onStop");
+        // TODO shared preferences
+        save_Settings();
 
-            // example from android developer reference
-        try {
-            FileOutputStream outStream = openFileOutput("savefile", Context.MODE_PRIVATE);
-            // TODO save Data
-            outStream.write(s_username.getBytes());
-            outStream.write(s_aliasname.getBytes());
-            outStream.write(Integer.toString(i_score).getBytes());
-            outStream.close();
-        } catch (Exception exept) {
-            exept.printStackTrace();
-        }
         super.onStop();
     }
+
+
 
     /**
      * Evaluates wich navigation item had been selected
@@ -256,8 +305,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return(x_user_present);
     }
 
+    public boolean get_only_use_wlan() {
+        return x_only_use_wlan;
+    }
+
     public void set_only_use_wlan(boolean value){
         x_only_use_wlan = value;
+        Log.v(TAG, "Val: " + x_only_use_wlan);
     }
 
     public void set_user_present(boolean user_present_){
@@ -362,6 +416,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth.signOut();
         // TODO: Update UI
         update_UI(null);
+        s_username = getString(R.string.no_user_username);
+        s_aliasname = getString(R.string.no_user_aliasname);
+        i_score = Integer.parseInt(getString(R.string.no_user_score));
     }
 
     public void update_UI(){
@@ -387,23 +444,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public String get_username_from_DB(){
-        Log.v(TAG, "get username from DB");
-        // TODO fill Method
-        return "Username";
-    }
 
-    public String get_aliasname_from_DB(){
-        Log.v(TAG, "get aliasname from DB");
-        // TODO fill Method (aliasname = e-mail address)
-        return "mail@example.com";
-    }
-
-    public int get_score_from_DB(){
-        Log.v(TAG, "get user score from DB");
-        // TODO fill Method (aliasname = e-mail address)
-        return 0;
-    }
 
     /**
      * Loading presets for Firebase user
@@ -422,6 +463,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation_view.setCheckedItem(R.id.nav_profile);
 
         }
+
+        // TODO Laden von sharedPreferences
     }
 
     // method from Android Studio Devolopers website
@@ -459,7 +502,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return 3;
     }
 
-}
+    /**
+     * Save local data to shared preferences
+     * Created by: Fabio
+     */
+    public void save_Settings() {
+        SharedPreferences.Editor edit = sharedPref.edit();
+        // Save current Settings
+        edit.putBoolean(getString(R.string.onlyUseWlan), x_only_use_wlan);
+        edit.putBoolean(getString(R.string.ac_gps_perm_granted), x_gps_permission_granted);
+        // Save user-data for offline useage
+        edit.putString(getString(R.string.ac_username), s_username);
+        edit.putString(getString(R.string.ac_aliasname), s_aliasname);
+        edit.putInt(getString(R.string.ac_score), i_score);
+        edit.putBoolean(getString(R.string.ac_user_present), x_user_present);
+        edit.commit();
+    }
+
+    public void read_Settings() {
+        // read saved settings from shared preferences
+        Log.v(TAG, "Val: " + x_only_use_wlan);
+        x_only_use_wlan = sharedPref.getBoolean(getString(R.string.onlyUseWlan), true);
+        // read user-data
+        s_username = sharedPref.getString(getString(R.string.ac_username),
+                getString(R.string.no_user_username)); // default value
+        s_aliasname = sharedPref.getString(getString(R.string.ac_aliasname),
+                getString(R.string.no_user_aliasname)); // default value
+        i_score = sharedPref.getInt(getString(R.string.ac_score),
+                Integer.parseInt(getString(R.string.no_user_score))); // default value
+        x_user_present = sharedPref.getBoolean(getString(R.string.ac_user_present), false);
+    }
+}// End of main Activity
 
 
 
