@@ -2,6 +2,7 @@ package com.example.fabiouceda.gui_test;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView iv_drawer_profilepic;
     private File saveSettingsFile; // storing settings & co.
     private acUser androidCachingUser; // contains FB user and additional information
+    private SharedPreferences sharedPref;
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean x_user_present;
     private boolean x_only_use_wlan;
+    private boolean x_gps_permission_granted;
 
     // Firebase Variables
     private FirebaseAuth mAuth;
@@ -254,6 +257,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return 0;
     }
 
+    public String get_username() {
+        return (s_username);
+    }
+
+    public String get_aliasname() {
+        return (s_aliasname);
+    }
 
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
@@ -502,5 +512,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
     }
+
+
+    /**
+     * Save local data to shared preferences
+     * Created by: Fabio
+     */
+    public void save_Settings() {
+        SharedPreferences.Editor edit = sharedPref.edit();
+        // Save current Settings
+        edit.putBoolean(getString(R.string.onlyUseWlan), x_only_use_wlan);
+        edit.putBoolean(getString(R.string.ac_gps_perm_granted), x_gps_permission_granted);
+        // Save user-data for offline useage
+        edit.putString(getString(R.string.ac_username), s_username);
+        edit.putString(getString(R.string.ac_aliasname), s_aliasname);
+        edit.putInt(getString(R.string.ac_score), i_score);
+        edit.putBoolean(getString(R.string.ac_user_present), x_user_present);
+        edit.commit();
+    }
+
+    public void read_Settings() {
+        // read saved settings from shared preferences
+        Log.v(TAG, "Val: " + x_only_use_wlan);
+        x_only_use_wlan = sharedPref.getBoolean(getString(R.string.onlyUseWlan), true);
+        // read user-data
+        s_username = sharedPref.getString(getString(R.string.ac_username),
+                getString(R.string.no_user_username)); // default value
+        s_aliasname = sharedPref.getString(getString(R.string.ac_aliasname),
+                getString(R.string.no_user_aliasname)); // default value
+        i_score = sharedPref.getInt(getString(R.string.ac_score),
+                Integer.parseInt(getString(R.string.no_user_score))); // default value
+        x_user_present = sharedPref.getBoolean(getString(R.string.ac_user_present), false);
+    }
+
 
 }
