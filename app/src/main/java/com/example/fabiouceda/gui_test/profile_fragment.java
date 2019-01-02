@@ -46,9 +46,6 @@ public class profile_fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final String username;
-        final String aliasname;
-        final int score;
 
         Log.v(TAG, "onCreateView called");
 
@@ -70,16 +67,7 @@ public class profile_fragment extends Fragment {
             public void onClick(View v) {
                 if(! ((MainActivity) getActivity()).is_user_present()){
                     // Login or Register:
-                    tv_username.setText("Lizzard440");
-                    ((MainActivity) getActivity()).set_username("Lizzard440");
-                    tv_aliasname.setText("Fabio Uceda Perona");
-                    ((MainActivity) getActivity()).set_aliasname("Fabio Uceda Perona");
-                    tv_score.setText("Score: " + Integer.toString(9999));
-                    ((MainActivity) getActivity()).set_score(9999);
-                    b_login_button.setText("Logout");
 
-                    ((MainActivity) getActivity()).set_user_present(true);
-                    // TODO replace Picture
 
                     // Create Alert Dialog Builder
                     AlertDialog.Builder login_builder = new AlertDialog.Builder(getActivity());
@@ -96,6 +84,19 @@ public class profile_fragment extends Fragment {
                                     Log.v(TAG, "Submit Login or Register clicked");
                                     grab_login_screen_content(v_login_or_register);
                                     switch(evaluate_login_content()){
+                                        case 0: // success
+                                            // TODO remove line underneath after testing
+                                            ((MainActivity) getActivity()).set_user_present(true);
+                                            tv_username.setText(((MainActivity)getActivity()).get_username());
+                                            tv_aliasname.setText(((MainActivity)getActivity()).get_aliasname());
+                                            tv_score.setText("Score: " + Integer.toString(((MainActivity)getActivity()).get_score()));
+                                            b_login_button.setText(getText(R.string.logout_lable));
+                                            break;
+                                        case -1: // failure
+                                            tv_username.setText(getString(R.string.no_user_username));
+                                            tv_aliasname.setText(getString(R.string.no_user_aliasname));
+                                            tv_score.setText("Score: " + getString(R.string.no_user_score));
+                                            break;
                                         default:
                                     }
                                 }
@@ -112,17 +113,14 @@ public class profile_fragment extends Fragment {
 
                 } else{
                     // Logout
-                    tv_username.setText("Username");
-                    ((MainActivity) getActivity()).set_username("username");
-                    tv_aliasname.setText("Alias Name");
-                    ((MainActivity) getActivity()).set_aliasname("aliasname");
-                    tv_score.setText("Score: " + Integer.toString(0));
-                    ((MainActivity) getActivity()).set_score(0);
-                    b_login_button.setText("Login or Register");
+                    tv_username.setText(getString(R.string.no_user_username));
+                    tv_aliasname.setText(getString(R.string.no_user_aliasname));
+                    tv_score.setText("Score: " + getString(R.string.no_user_score));
+                    b_login_button.setText(getText(R.string.login_lable));
 
                     ((MainActivity) getActivity()).logout_user();
+                    // TODO remove line underneath after testing
                     ((MainActivity) getActivity()).set_user_present(false);
-                    // TODO replace Picture
                 }
 
                 ((MainActivity) getActivity()).update_UI();
@@ -163,6 +161,11 @@ public class profile_fragment extends Fragment {
         register_pw1 = et_contentgrabber.getText().toString();
         et_contentgrabber = (EditText) v_login_window.findViewById(R.id.register_PW2);
         register_pw2 = et_contentgrabber.getText().toString();
+        Log.v(TAG, "Read Data:\nlogin mail:        " + login_mail
+                                + "\nlogin PW:          " + login_pw
+                                + "\nregister username: " + register_username
+                                + "\nregister mail:     " + register_mail
+                                + "\nregister PW:       " + register_pw1 + " & " + register_pw2);
     }
 
     private int evaluate_login_content(){
@@ -176,28 +179,40 @@ public class profile_fragment extends Fragment {
         Log.v(TAG, message);
         */
 
-        if(isEmailValid(login_mail) == true
-                && TextUtils.isEmpty(login_pw) == false
-                && TextUtils.isEmpty(register_mail) == true
-                && TextUtils.isEmpty(register_username) == true
-                && TextUtils.isEmpty(register_pw1) == true
-                && TextUtils.isEmpty(register_pw2) == true){
+        if(isEmailValid(login_mail) == true){
+            if(TextUtils.isEmpty(login_pw)){
+                // missing login Password
+                // Error Message
+                Toast.makeText(getContext(), getString(R.string.missing_pw), Toast.LENGTH_LONG).show();
+                return (-1);
+            }
             // Go on to attempt login
             Log.v(TAG, "attempt Login");
             ((MainActivity) getActivity()).attempt_login(login_mail, login_pw);
 
-        } else if(TextUtils.isEmpty(login_mail) == true
-                && TextUtils.isEmpty(login_pw) == true
-                && isEmailValid(register_mail) == true
-                && TextUtils.isEmpty(register_pw1) == false
-                && TextUtils.isEmpty(register_username) == false
-                && register_pw1 == register_pw2){
+        } else if(isEmailValid(register_mail) == true){
+            if(TextUtils.isEmpty(register_username)){
+                // without username
+                return (-1);
+            }
+            if(TextUtils.isEmpty(register_pw1)){
+                // without password
+                // Error Message
+                Toast.makeText(getContext(), getString(R.string.missing_pw), Toast.LENGTH_LONG).show();
+                return (-1);
+            }
+            if(register_pw2.equals(register_pw1) == false){//
+                // if passwords don't match
+                // Error Message
+                Toast.makeText(getContext(), getString(R.string.unequal_pw), Toast.LENGTH_LONG).show();
+                return (-1);
+            }
             // Go on to attempt register
             Log.v(TAG, "attempt Register");
             ((MainActivity) getActivity()).attempt_register(register_mail, register_pw1, register_username);
         }else{
             // Error Message
-            Toast.makeText(getContext(), "Please Enter valid Data for ONE option", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.no_entry_was_made), Toast.LENGTH_LONG).show();
         }
 
         return 0;

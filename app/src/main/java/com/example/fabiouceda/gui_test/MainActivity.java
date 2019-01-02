@@ -1,10 +1,19 @@
 package com.example.fabiouceda.gui_test;
 
+/*
+ * Position mit location manager und location listener
+ * Daten speichern mit sharedPreferences
+ * */
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -12,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -38,7 +48,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -46,10 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Objects
     private TextView tv_drawer_username;
     private TextView tv_drawer_aliasname;
-    private ImageView iv_drawer_profilepic;
-    private File saveSettingsFile; // storing settings & co.
-    private acUser androidCachingUser; // contains FB user and additional information
+    private LocationManager locManager;
+    private LocationListener locListener;
     private SharedPreferences sharedPref;
+    private acUser androidCachingUser;
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -67,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Firebase Variables
     private FirebaseAuth mAuth;
-
     private FirebaseFirestore db;
 
 
@@ -113,16 +121,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation_view.setCheckedItem(R.id.nav_play);
         }
         View Head = navigation_view.getHeaderView(0);
-        // Snippet End
+        // end of Code-Snippet
 
-        s_username = "Lizzard440";
-        s_aliasname = "Fabio Uceda Perona";
-        i_score = 9999;
+        sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
+        read_Settings(); // restore saved settings from shared Preferences
 
         tv_drawer_username = Head.findViewById(R.id.nav_head_username);
         tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
-        saveSettingsFile = new File(getApplicationContext().getFilesDir(), "savefile");
+
+        locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.v(TAG, "Location changed");
+                Log.v(TAG, "Lat:  " + String.valueOf(location.getLatitude()));
+                Log.v(TAG, "Long: " + String.valueOf(location.getLongitude()));
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.v(TAG, "Status changed");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.v(TAG, "Provider enabled");
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Log.v(TAG, "Provider disabled");
+            }
+        };
+
+        //Registering the listener with the Location-Manager to receive updates
+        // of cause after checking for permission
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            x_gps_permission_granted = false;
+            return;
+        }
+        x_gps_permission_granted = true;
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+
+
     }
 
     /**
@@ -133,20 +182,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         Log.v(TAG, "onStop");
+        // TODO shared preferences
+        save_Settings();
 
-            // example from android developer reference
-        try {
-            FileOutputStream outStream = openFileOutput("savefile", Context.MODE_PRIVATE);
-            // TODO save Data
-            outStream.write(s_username.getBytes());
-            outStream.write(s_aliasname.getBytes());
-            outStream.write(Integer.toString(i_score).getBytes());
-            outStream.close();
-        } catch (Exception exept) {
-            exept.printStackTrace();
-        }
         super.onStop();
     }
+
+
 
     /**
      * Evaluates wich navigation item had been selected
@@ -257,24 +299,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return 0;
     }
 
-    public String get_username() {
-        return (s_username);
-    }
-
-    public String get_aliasname() {
-        return (s_aliasname);
-    }
 
     public int get_score(){
         return (i_score); // TODO replace with Variable Score
     }
 
+    public String get_username() { return (s_username);}
+
+    public String get_aliasname() { return (s_aliasname);}
+
     public boolean is_user_present(){
         return(x_user_present);
     }
 
+    public boolean get_only_use_wlan() {
+        return x_only_use_wlan;
+    }
+
     public void set_only_use_wlan(boolean value){
         x_only_use_wlan = value;
+        Log.v(TAG, "Val: " + x_only_use_wlan);
     }
 
     public void set_user_present(boolean user_present_){
@@ -330,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param password
      * @return
      */
+    //TODO: Fehlercodes: 0:alles ok, 1:keine Verbindung, 2:sonstiges
     // code sippets from firebase assistent
     public int attempt_register(String email, String password, String username) {
         // set username
@@ -384,6 +429,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mAuth.signOut();
         x_user_present = false;
         update_UI(null);
+        s_username = getString(R.string.no_user_username);
+        s_aliasname = getString(R.string.no_user_aliasname);
+        i_score = Integer.parseInt(getString(R.string.no_user_score));
     }
 
     public void update_UI(){
@@ -410,6 +458,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
     /**
      * Loading presets for Firebase user
      * Created by: Kevin
@@ -427,6 +476,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation_view.setCheckedItem(R.id.nav_profile);
 
         }
+
+        // TODO Laden von sharedPreferences
     }
 
     /**
@@ -490,30 +541,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
     }
-
-    /**
-     * method to read data from database
-     * Created by: Kevin
-     * Code from Firebase Assistant
-     */
-    public void ReadFromDB() {
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.v(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
-
-
     /**
      * Save local data to shared preferences
      * Created by: Fabio
@@ -545,5 +572,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         x_user_present = sharedPref.getBoolean(getString(R.string.ac_user_present), false);
     }
 
+
+
+
+    /**
+     * method to read data from database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     */
+    public void ReadFromDB() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.v(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
 
 }

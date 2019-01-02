@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Login"
+        android:text="@string/login_headline"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp" />
 
@@ -24,8 +24,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="eMail Address"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/login_email_hint"
+        android:inputType="textEmailAddress"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:id="@+id/login_PW"
@@ -34,8 +35,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:hint="@string/login_password_hint"
+        android:inputType="textPassword"
+        android:importantForAutofill="no" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,7 +45,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingTop="15dp"
-        android:text="Register"
+        android:text="@string/register_headline"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="20sp" />
 
@@ -54,8 +56,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="eMail Address"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/register_email_hint"
+        android:inputType="textEmailAddress"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/register_username"
@@ -64,7 +67,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="Username" />
+        android:hint="@string/register_username_hint"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:id="@+id/register_PW1"
@@ -73,8 +77,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:hint="@string/register_password_hint"
+        android:inputType="textPassword"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/register_PW2"
@@ -83,7 +88,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:ems="10"
-        android:hint="repeat Password"
-        android:inputType="textPassword" />
+        android:hint="@string/register_repeat_password_hint"
+        android:inputType="textPassword"
+        android:importantForAutofill="no"/>
 
 </LinearLayout>
