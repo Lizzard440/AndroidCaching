@@ -38,14 +38,8 @@
             android:checked="true"
             android:textSize="20dp"/>
 
-    </LinearLayout>
+        <!-- Spinner for Range Settings -->
 
-    <Button
-        android:layout_width="match_parent"
-        android:id="@+id/settings_frag_save"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:text="Save" />
+    </LinearLayout>
 
 </RelativeLayout>

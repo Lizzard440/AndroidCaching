@@ -31,6 +31,7 @@ public class settings_fragment extends Fragment {
         View v_settings_fragment = inflater.inflate(R.layout.fragment_settings, container, false);
 
         b_help = (Button) v_settings_fragment.findViewById(R.id.settings_frag_help);
+        sw_only_Wlan = (Switch) v_settings_fragment.findViewById(R.id.use_only_wlan_switch);
 
         b_help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,12 +40,19 @@ public class settings_fragment extends Fragment {
                 instruction_window.setPositiveButton("got it!", null);
                 instruction_window.setTitle("Help");
                 instruction_window.setMessage(R.string.help_in_settings);
+
                 instruction_window.create().show();
             }
         });
 
-        sw_only_Wlan = (Switch) v_settings_fragment.findViewById(R.id.use_only_wlan_switch);
-        ((MainActivity)getActivity()).set_only_use_wlan(sw_only_Wlan.isChecked());
+        sw_only_Wlan.setChecked(((MainActivity)getActivity()).get_only_use_wlan());
+
+        sw_only_Wlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).set_only_use_wlan(sw_only_Wlan.isChecked());
+            }
+        });
 
         return v_settings_fragment;
     }

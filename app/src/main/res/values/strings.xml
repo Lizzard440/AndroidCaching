@@ -23,7 +23,16 @@
         Get new and exciting challanges, uploaded to our database by other users</string>
     <string name="help_in_settings">
         Do I realy need to explain what "Settings" are?!</string>
-    <!--  -->
+
+    <!-- Toast messages for login screen -->
+    <string name="missing_pw">Please enter a password</string>
+    <string name="missing_username">Please enter a username</string>
+    <string name="unequal_pw">Passwords did not match</string>
+    <string name="no_entry_was_made">Please enter some data...</string>
+
+    <!-- Login Screen Labels -->
+    <string name="login_lable">LOGIN OR REGISTER</string>
+    <string name="logout_lable">LOGOUT</string>
 
     <!-- Labels for NavigationDrawer -->
     <string name="nav_drawer_profile"   >My Profile</string>
@@ -37,4 +46,23 @@
     <string name="wrong_pw_toast">Wrong password!</string>
     <string name="check_connection_toast">enable  Internet-connection!</string>
 
+    <!-- Values for the login dialogue -->
+    <string name="login_headline">Login</string>
+    <string name="login_email_hint">eMail Address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="register_headline">Register</string>
+    <string name="register_email_hint">eMail Address</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_repeat_password_hint">repeat Password</string>
+
+    <!-- AndroidCaching preference Keys -->
+    <string name="preference_file_key">ADCA2018</string>
+
+    <string name="onlyUseWlan">WlanUsage</string>
+    <string name="ac_username">userName</string>
+    <string name="ac_aliasname">userMail</string>
+    <string name="ac_score">userScore</string>
+    <string name="ac_user_present">AC_User_is_present</string>
+    <string name="ac_gps_perm_granted">GPS_Granted</string>
 </resources>
