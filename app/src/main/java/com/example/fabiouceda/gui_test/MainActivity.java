@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         x_gps_permission_granted = true;
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
 
-
     }
 
     /**
@@ -378,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // code sippets from firebase assistent
     public int attempt_register(String email, String password, String username) {
         // set username
-        androidCachingUser.setUsername(s_username);
+        androidCachingUser.setUsername(username);
 
         // Check if the mobile is connected to network
         if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))) {
@@ -402,9 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 UploadInDB(androidCachingUser);
 
                                 i_register_state = 0;
-
                             }
-
                             else {
                                 // If sign in fails, display a message to the user.
                                 Log.v(TAG, "regigster attempt: failure", task.getException());
@@ -541,6 +538,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
     }
+
+    /**
+     * method to read data from database
+     * Created by: Kevin
+     * Code from Firebase Assistant
+     */
+    public void ReadFromDB() {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.v(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.v(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
     /**
      * Save local data to shared preferences
      * Created by: Fabio
@@ -570,31 +590,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         i_score = sharedPref.getInt(getString(R.string.ac_score),
                 Integer.parseInt(getString(R.string.no_user_score))); // default value
         x_user_present = sharedPref.getBoolean(getString(R.string.ac_user_present), false);
-    }
-
-
-
-
-    /**
-     * method to read data from database
-     * Created by: Kevin
-     * Code from Firebase Assistant
-     */
-    public void ReadFromDB() {
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.v(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.v(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
     }
 
 }
