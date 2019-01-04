@@ -6,6 +6,7 @@ package com.example.fabiouceda.gui_test;
  * */
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +33,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +48,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.io.File;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int i_score;
     private int i_login_state;
     private int i_register_state;
+    private int i_uploadStatus = 0;
 
     private boolean x_user_present;
     private boolean x_only_use_wlan;
@@ -77,6 +82,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Firebase Variables
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private DocumentReference mDatabaseRef;
+
+    private FirebaseStorage storage;
+    private StorageReference mStorageRef;
+
+    private Uri mImageUri;
 
 
 
@@ -95,9 +106,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.v(TAG, "onCreate");
 
+        // Firebase variables
+            // authentication
         mAuth = FirebaseAuth.getInstance();
-
+            // database
         db = FirebaseFirestore.getInstance();
+        mDatabaseRef = db.document("users");
+            // Storage
+        storage = FirebaseStorage.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
         androidCachingUser = new acUser();
 
@@ -215,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_browse_challanges:
                 if(x_only_use_wlan == false
                         ||(x_only_use_wlan == true
-                        &&    Check_Connectivity() <= 1)){
+                        &&    check_connectivity() <= 1)){
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new get_challanges_fragment()).commit();
                 }else{
@@ -338,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     // code sippets from firebase assistent
     public int attempt_login(String email, String password) {
-       if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))){
+       if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan && (check_connectivity() < 3))){
            mAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                        @Override
@@ -380,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         androidCachingUser.setUsername(username);
 
         // Check if the mobile is connected to network
-        if((x_only_use_wlan && (Check_Connectivity() < 2)) || (!x_only_use_wlan && (Check_Connectivity() < 3))) {
+        if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan && (check_connectivity() < 3))) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -398,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 // set eMail
                                 androidCachingUser.seteMail(user.getEmail());
 
-                                UploadInDB(androidCachingUser);
+                                uploadInDB(androidCachingUser);
 
                                 i_register_state = 0;
                             }
@@ -481,12 +498,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *  method from Android Studio Devolopers website
      *  Created by: Kevin
      *  Code snippets from Android-Developer
-     *  returncodes:    0: Wifi + Mobile connected
+     *  @return :       0: Wifi + Mobile connected
      *                  1: Only Wifi connected
      *                  2: Only Mobile connected
      *                  3: Nothing connected
      */
-    public int Check_Connectivity() {
+    public int check_connectivity() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isWifiConn = false;
@@ -518,11 +535,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * method to upload user data into database
-     * Created by: Kevin
-     * Code from Firebase Assistant
-     * @param user
+     * created by: Kevin
+     * code from Firebase Assistant
+     * @param user AndroidCaching-User to upload to database
      */
-    public void UploadInDB(acUser user) {
+    public void uploadInDB(acUser user) {
         db.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -541,10 +558,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * method to read data from database
-     * Created by: Kevin
-     * Code from Firebase Assistant
+     * created by: Kevin
+     * code from Firebase Assistant
      */
-    public void ReadFromDB() {
+    public void readFromDB() {
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -560,6 +577,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
     }
+
+    /**
+     * method to upload an image to database
+     * created by: Kevin
+     * Code from Firebase Assistant
+     * @param uri image-uri to upload to database
+     * @param name image name contains coordinates
+     * @return i_uploadStatus: 0: successful, 1: fail
+     */
+    public int uploadImage(Uri uri, String name) {
+
+        if(uri != null) {
+            StorageReference imageReference = mStorageRef.child(name
+                    + "." + getFileExtension(uri));
+            imageReference.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            i_uploadStatus = 0;
+                            Log.v(TAG, "Upload was successful.");
+                            
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            i_uploadStatus = 1;
+                            Log.v(TAG, "Upload has failed.");
+                        }
+                    });
+        }
+        return i_uploadStatus;
+    }
+
+    /**
+     * method to download an image from database
+     * created by: Kevin
+     * code from Firebase Assistant
+     * @param name image name
+     * @return 0: ok, 1: fail
+     */
+    public int downloadImage(String name) {
+
+        return 0;
+    }
+
+    /**
+     * method to get the file extension of the image
+     * created by: Kevin
+     * code from https://www.youtube.com/watch?v=lPfQN-Sfnjw&list=PLrnPJCHvNZuB_7nB5QD-4bNg6tpdEUImQ&index=3
+     * @param uri Uri of the image
+     * @return image extension
+     */
+    public String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
 
     /**
      * Save local data to shared preferences
