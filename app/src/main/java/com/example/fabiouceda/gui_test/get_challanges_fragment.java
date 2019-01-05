@@ -24,10 +24,12 @@ public class get_challanges_fragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView called");
 
-        View v_get_challanges = inflater.inflate(R.layout.fragment_get_challanges, container, false);
+        View v_get_challanges = inflater.inflate(R.layout.fragment_get_challanges, container,
+                false);
 
         b_help = (Button) v_get_challanges.findViewById(R.id.get_ch_frag_help);
 

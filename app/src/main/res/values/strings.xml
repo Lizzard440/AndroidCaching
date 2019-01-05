@@ -1,50 +1,60 @@
 <resources>
     <string name="app_name">Android-Caching</string>
 
+
     <!-- Used for opening and closing the drawer. DO NOT CHANGE!!! -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- Set Values for the Case, that no User is logged in -->
-    <string name="no_user_username">username</string>
-    <string name="no_user_aliasname">aliasname</string>
+
+    <!-- Set Values for the case, that no User is logged in -->
+    <string name="no_user_username">Username</string>
+    <string name="no_user_aliasname">e-Mail</string>
     <string name="no_user_score">0</string>
+
 
     <!-- Messages for Help Displays -->
     <string name="help_in_profile">
         Manage your Account, or play offline. \n
         In login-screen you may only enter your information for the desired action.</string>
     <string name="help_in_play_random">
-        Choses a random challange from your local challanges for you to tackle\n
-        or\nYou landed here because you selected a specific challange from your local stash</string>
+        Chooses a random challenge from your local challenges for you to tackle\n
+        or\nYou landed here because you selected a specific challenge from your local stash</string>
     <string name="help_in_local_challanges">
-        See all your downloaded challanges nicely listed.</string>
+        See all your downloaded challenges nicely listed.\nAnd you can even get new ones</string>
     <string name="help_in_browse_challanges">
-        Get new and exciting challanges, uploaded to our database by other users</string>
+        Get new and exciting challenges, uploaded to our database by other users</string>
     <string name="help_in_settings">
-        Do I realy need to explain what "Settings" are?!</string>
+        Do I really need to explain what "Settings" are?!</string>
+
 
     <!-- Toast messages for login screen -->
     <string name="missing_pw">Please enter a password</string>
     <string name="missing_username">Please enter a username</string>
     <string name="unequal_pw">Passwords did not match</string>
-    <string name="no_entry_was_made">Please enter some data...</string>
+    <string name="no_entry_was_made">Please enter some data…</string>
+    <string name="no_internet_connection">No connection to Internet</string>
+    <string name="unresolvaable_error">An error occurred…</string>
+
 
     <!-- Login Screen Labels -->
-    <string name="login_lable">LOGIN OR REGISTER</string>
-    <string name="logout_lable">LOGOUT</string>
+    <string name="login_label">LOGIN OR REGISTER</string>
+    <string name="logout_label">LOGOUT</string>
+
 
     <!-- Labels for NavigationDrawer -->
     <string name="nav_drawer_profile"   >My Profile</string>
     <string name="nav_drawer_play"      >Play Random Local</string>
-    <string name="nav_drawer_locals"    >Local Challanges</string>
-    <string name="nav_drawer_browse"    >Browse Challanges</string>
+    <string name="nav_drawer_locals"    >Local Challenges</string>
+    <string name="nav_drawer_browse"    >Browse Challenges</string> <!-- not needed any longer -->
     <string name="nav_drawer_settings"  >Settings</string>
     <string name="nav_drawer_sync"      >Sync. with DB</string>
 
+
     <!-- displayed Error messages -->
     <string name="wrong_pw_toast">Wrong password!</string>
-    <string name="check_connection_toast">enable  Internet-connection!</string>
+    <string name="check_connection_toast">Check your Internet-connection!</string>
+
 
     <!-- Values for the login dialogue -->
     <string name="login_headline">Login</string>
@@ -56,6 +66,7 @@
     <string name="register_password_hint">Password</string>
     <string name="register_repeat_password_hint">repeat Password</string>
 
+
     <!-- AndroidCaching preference Keys -->
     <string name="preference_file_key">ADCA2018</string>
 
@@ -65,4 +76,33 @@
     <string name="ac_score">userScore</string>
     <string name="ac_user_present">AC_User_is_present</string>
     <string name="ac_gps_perm_granted">GPS_Granted</string>
+    <string name="last_active_fragment">last_Fragment</string>
+
+
+    <!-- Local challanges dialouges -->
+    <string name="clicked_empty_challange_message">
+        You clicked on an empty slot. How do you want to get a challenge here?
+    </string>
+    <string name="selected_existing_challange">
+        Do you want to remove this challenge?
+    </string>
+    <string name="download_challange_label">Download</string>
+    <string name="create_own_challange_label">Make own</string>
+    <string name="cancel_operation">Cancel</string>
+
+
+    <!-- Filenames for internal image files -->
+    <string name="recently_captured">new_challange</string>
+    <string name="pic_ch1">Challange_1</string>
+    <string name="pic_ch2">Challange_2</string>
+    <string name="pic_ch3">Challange_3</string>
+    <string name="pic_ch4">Challange_4</string>
+    <string name="pic_ch5">Challange_5</string>
+    <string name="pic_ch6">Challange_6</string>
+    <string name="pic_ch7">Challange_7</string>
+    <string name="pic_ch8">Challange_8</string>
+    <string name="pic_ch9">Challange_9</string>
+    <string name="pic_ch10">Challange_10</string>
+    <string name="pic_ch11">Challange_11</string>
+    <string name="pic_ch12">Challange_12</string>
 </resources>

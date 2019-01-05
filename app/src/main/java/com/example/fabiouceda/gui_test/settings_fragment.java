@@ -19,18 +19,19 @@ import android.widget.Switch;
 
 public class settings_fragment extends Fragment {
 
-    private Button b_help;
     private Switch sw_only_Wlan;
 
     private final String TAG = "TAG1_SETT_FRAG";
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView called");
-        View v_settings_fragment = inflater.inflate(R.layout.fragment_settings, container, false);
+        View v_settings_fragment = inflater.inflate(R.layout.fragment_settings, container,
+                false);
 
-        b_help = (Button) v_settings_fragment.findViewById(R.id.settings_frag_help);
+        Button b_help = (Button) v_settings_fragment.findViewById(R.id.settings_frag_help);
         sw_only_Wlan = (Switch) v_settings_fragment.findViewById(R.id.use_only_wlan_switch);
 
         b_help.setOnClickListener(new View.OnClickListener() {

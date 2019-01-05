@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="240dp"
-        android:text="Username"
+        android:text="@string/no_user_username"
         android:textSize="30dp"/>
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="210dp"
-        android:text="Alias Name"
+        android:text="@string/no_user_aliasname"
         android:textSize="20dp"/>
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="180dp"
-        android:text="Score: 3200"
+        android:text="Score: 0"
         android:textSize="20dp"/>
 
     <Button
