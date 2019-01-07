@@ -612,7 +612,8 @@ public class MainActivity extends AppCompatActivity
         androidCachingUser.setUsername(username);
 
         // Check if the mobile is connected to network
-        if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan && (check_connectivity() < 3))) {
+        if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan
+                && (check_connectivity() < 3))) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -685,7 +686,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    
+
 
     /**
      * Updating UI with user information from DB or setting it to default values if no user is
@@ -809,7 +810,8 @@ public class MainActivity extends AppCompatActivity
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.v(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Log.v(TAG, "DocumentSnapshot added with ID: "
+                                + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -864,7 +866,8 @@ public class MainActivity extends AppCompatActivity
                             i_uploadStatus = 0;
                             Log.v(TAG, "Upload was successful.");
 
-                            Task<Uri> downloadUri = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                            Task<Uri> downloadUri = taskSnapshot.getMetadata()
+                                    .getReference().getDownloadUrl();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
