@@ -170,7 +170,8 @@ public class MainActivity extends AppCompatActivity
         }
         // end of Code-Snippet
 
-        sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
 
         // Location strategies
         // Provider : GPS
@@ -571,7 +572,8 @@ public class MainActivity extends AppCompatActivity
      *         2: other error
      */
     public int attempt_login(String email, String password) {
-       if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan && (check_connectivity() < 3))){
+       if((x_only_use_wlan && (check_connectivity() < 2)) || (!x_only_use_wlan
+               && (check_connectivity() < 3))){
            mAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                        @Override
