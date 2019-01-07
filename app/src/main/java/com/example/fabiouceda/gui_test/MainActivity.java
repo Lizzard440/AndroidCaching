@@ -685,7 +685,7 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-
+    
 
     /**
      * Updating UI with user information from DB or setting it to default values if no user is
