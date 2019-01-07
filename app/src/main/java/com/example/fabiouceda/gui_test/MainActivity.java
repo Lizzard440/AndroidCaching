@@ -49,7 +49,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LocationManager locManager;
     private LocationListener locListener;
     private SharedPreferences sharedPref;
-    private acUser androidCachingUser;
+    private ACUser androidCachingUser;
 
     // primitive Variables
     private final String TAG = "TAG1_MAIN_ACT";
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         storage = FirebaseStorage.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
-        androidCachingUser = new acUser();
+        androidCachingUser = new ACUser();
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -320,9 +319,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return (i_score); // TODO replace with Variable Score
     }
 
-    public String get_username() { return (s_username);}
+    public String get_username() {
+        return (s_username);
+    }
 
-    public String get_aliasname() { return (s_aliasname);}
+    public String get_aliasname() {
+        return (s_aliasname);
+    }
 
     public boolean is_user_present(){
         return(x_user_present);
@@ -539,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * code from Firebase Assistant
      * @param user AndroidCaching-User to upload to database
      */
-    public void uploadInDB(acUser user) {
+    public void uploadInDB(ACUser user) {
         db.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -591,13 +594,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(uri != null) {
             StorageReference imageReference = mStorageRef.child(name
                     + "." + getFileExtension(uri));
+
             imageReference.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             i_uploadStatus = 0;
                             Log.v(TAG, "Upload was successful.");
-                            
+
+                            Task<Uri> downloadUri = taskSnapshot.getMetadata().getReference().getDownloadUrl();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -611,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return i_uploadStatus;
     }
 
+
     /**
      * method to download an image from database
      * created by: Kevin
@@ -619,7 +625,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @return 0: ok, 1: fail
      */
     public int downloadImage(String name) {
+        mStorageRef.child(name).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
 
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
         return 0;
     }
 

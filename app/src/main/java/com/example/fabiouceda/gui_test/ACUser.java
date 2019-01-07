@@ -8,7 +8,7 @@ package com.example.fabiouceda.gui_test;
 
 import com.google.firebase.auth.FirebaseUser;
 
-public class acUser  {
+public class ACUser {
     private FirebaseUser fb_user;
     private String username;
     private int score;
