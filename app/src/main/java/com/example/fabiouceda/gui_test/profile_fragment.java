@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +62,7 @@ public class profile_fragment extends Fragment {
         View v_profile_fragment = inflater.inflate(R.layout.fragment_profile, container,
                 false);
 
+        // init layout objects
         tv_username = v_profile_fragment.findViewById(R.id.profile_frag_username);
         tv_aliasname = v_profile_fragment.findViewById(R.id.profile_frag_aliasname);
         tv_score = v_profile_fragment.findViewById(R.id.profile_frag_Score);
@@ -99,8 +98,6 @@ public class profile_fragment extends Fragment {
                                     grab_login_screen_content(v_login_or_register);
                                     switch(evaluate_login_content()){
                                         case 0: // success (Correct data)
-                                            // TODO remove line underneath after testing
-                                            ((MainActivity) getActivity()).set_user_present(true);
                                             tv_username.setText(((MainActivity)getActivity())
                                                     .get_username());
                                             tv_aliasname.setText(((MainActivity)getActivity())
@@ -137,8 +134,6 @@ public class profile_fragment extends Fragment {
                     b_login_button.setText(getText(R.string.login_label));
 
                     ((MainActivity) getActivity()).logout_user();
-                    // TODO remove line underneath after testing
-                    ((MainActivity) getActivity()).set_user_present(false);
                 }
 
                 ((MainActivity) getActivity()).update_UI();
@@ -206,14 +201,6 @@ public class profile_fragment extends Fragment {
      * @return error-code 0-OK | -1-Error
      */
     private int evaluate_login_content(){
-        /* Test
-        String message = "login Mail:    " + login_mail
-                        + "\nlogin PW:      " + login_pw
-                        + "\nregister Mail: " + register_mail
-                        + "\nregister PW1:  " + register_pw1
-                        + "\nregister PW2:  " + register_pw2;
-        Log.v(TAG, message);
-        */
 
         if(isEmailValid(login_mail) == true){
             if(TextUtils.isEmpty(login_pw)){
@@ -269,11 +256,11 @@ public class profile_fragment extends Fragment {
 
     /**
      * method is used for checking valid email id format.
-     *
-     * @param email string to check if it is a e-mail
-     * @return boolean true for valid false for invalid
+     * Created by: Fabio
      * from: https://stackoverflow.com/questions/6119722
      * /how-to-check-edittexts-text-is-email-address-or-not
+     * @param email string to check if it is a e-mail
+     * @return boolean true for valid false for invalid
      */
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$"; // ???

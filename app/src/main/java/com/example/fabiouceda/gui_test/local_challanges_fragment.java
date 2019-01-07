@@ -5,9 +5,6 @@ package com.example.fabiouceda.gui_test;
  * Created by: Fabio
  */
 
-/*
-* uploadImage(Bitmap image, String name);
-* */
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -22,13 +19,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import static com.example.fabiouceda.gui_test.R.drawable.ic_add_circle_outline_black_128dp;
-
 public class local_challanges_fragment extends Fragment {
 
     private final String TAG = "TAG1_LOC_CH_FRAG";
 
-    private ImageButton ib_challanges[] = new ImageButton[12];
+    private ImageButton ib_challenges[] = new ImageButton[12];
 
     private String filenames[] = new String[12];
 
@@ -65,18 +60,18 @@ public class local_challanges_fragment extends Fragment {
             }
         });
 
-        ib_challanges[0] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_1);
-        ib_challanges[1] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_2);
-        ib_challanges[2] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_3);
-        ib_challanges[3] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_4);
-        ib_challanges[4] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_5);
-        ib_challanges[5] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_6);
-        ib_challanges[6] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_7);
-        ib_challanges[7] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_8);
-        ib_challanges[8] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_9);
-        ib_challanges[9] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_10);
-        ib_challanges[10] = (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_11);
-        ib_challanges[11] = (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_12);
+        ib_challenges[0] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_1);
+        ib_challenges[1] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_2);
+        ib_challenges[2] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_3);
+        ib_challenges[3] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_4);
+        ib_challenges[4] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_5);
+        ib_challenges[5] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_6);
+        ib_challenges[6] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_7);
+        ib_challenges[7] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_8);
+        ib_challenges[8] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_9);
+        ib_challenges[9] =  (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_10);
+        ib_challenges[10] = (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_11);
+        ib_challenges[11] = (ImageButton) v_local_challanges.findViewById(R.id.Loc_Challange_12);
 
         // Create On click listeners for the different buttons
         create_onClickListeners();
@@ -84,9 +79,7 @@ public class local_challanges_fragment extends Fragment {
         // Create on long clock listeners
         create_onLongClockListeners();
 
-        // TODO retrieve images from private app-storage
-
-        update_challanges();
+        update_challenges();
 
         return v_local_challanges;
     }
@@ -147,16 +140,13 @@ public class local_challanges_fragment extends Fragment {
             alert_builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO Remove corresponding Challange from internal Storage
                     ((MainActivity)getActivity()).delete_image(selection_no - 1);
-                    update_challanges();
+                    update_challenges();
                 }
             });
             alert_builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO create own challenge was selected. Now handle it!
-                    Log.v(TAG, "Create Own challenge selected");
                 }
             });
             alert_builder.create();
@@ -170,73 +160,73 @@ public class local_challanges_fragment extends Fragment {
      * Created by: Fabio
      */
     private void create_onClickListeners(){
-        ib_challanges[0].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(1);
             }
         });
-        ib_challanges[1].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(2);
             }
         });
-        ib_challanges[2].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(3);
             }
         });
-        ib_challanges[3].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(4);
             }
         });
-        ib_challanges[4].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(5);
             }
         });
-        ib_challanges[5].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(6);
             }
         });
-        ib_challanges[6].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[6].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(7);
             }
         });
-        ib_challanges[7].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[7].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(8);
             }
         });
-        ib_challanges[8].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[8].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(9);
             }
         });
-        ib_challanges[9].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[9].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(10);
             }
         });
-        ib_challanges[10].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[10].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(11);
             }
         });
-        ib_challanges[11].setOnClickListener(new View.OnClickListener() {
+        ib_challenges[11].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stuff_got_clicked(12);
@@ -250,84 +240,84 @@ public class local_challanges_fragment extends Fragment {
      * Created by: Fabio
      */
     private void create_onLongClockListeners(){
-        ib_challanges[0].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[0].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(1);
                 return false;
             }
         });
-        ib_challanges[1].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[1].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(2);
                 return false;
             }
         });
-        ib_challanges[2].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[2].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(3);
                 return false;
             }
         });
-        ib_challanges[3].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[3].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(4);
                 return false;
             }
         });
-        ib_challanges[4].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[4].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(5);
                 return false;
             }
         });
-        ib_challanges[5].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[5].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(6);
                 return false;
             }
         });
-        ib_challanges[6].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[6].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(7);
                 return false;
             }
         });
-        ib_challanges[7].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[7].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(8);
                 return false;
             }
         });
-        ib_challanges[8].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[8].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(9);
                 return false;
             }
         });
-        ib_challanges[9].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[9].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(10);
                 return false;
             }
         });
-        ib_challanges[10].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[10].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(11);
                 return false;
             }
         });
-        ib_challanges[11].setOnLongClickListener(new View.OnLongClickListener() {
+        ib_challenges[11].setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 select_challange(12);
@@ -337,17 +327,16 @@ public class local_challanges_fragment extends Fragment {
     }
 
 
-    private void update_challanges(){
+    private void update_challenges(){
         for(int i = 0; i < 12; i++){
-            Log.v(TAG+"_EXISTS", String.valueOf(i) + ": " + String.valueOf(((MainActivity)getActivity()).does_file_exist(i)));
             if(((MainActivity)getActivity()).does_file_exist(i)){
                 Bitmap mBmp = null;
                 mBmp = ((MainActivity) getActivity()).restore_img_from_internal_storage(i);
                 if (mBmp != null){
-                    ib_challanges[i].setImageBitmap(mBmp);
+                    ib_challenges[i].setImageBitmap(mBmp);
                 }
             } else {
-                ib_challanges[i].setImageDrawable(getResources()
+                ib_challenges[i].setImageDrawable(getResources()
                         .getDrawable(R.drawable.ic_add_circle_outline_black_128dp));
             }
         }

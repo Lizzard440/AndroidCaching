@@ -8,42 +8,13 @@ package com.example.fabiouceda.gui_test;
 
 import com.google.firebase.auth.FirebaseUser;
 
-public class acUser  {
+public class ACUser {
     private FirebaseUser fb_user;
     private String username;
     private int score;
     private String user_ID;
     private String eMail;
 
-
-    /**
-     * extracts the data from the Firebase user
-     * created by: Fabio
-     */
-    private void extractData (){
-        user_ID = fb_user.getUid();
-        eMail = fb_user.getEmail();
-    }
-
-
-    /**
-     * returns the Firebase user to the calling instance
-     * created by: Fabio
-     * @return instance of FirebaseUser
-     */
-    public FirebaseUser getFb_user() {
-        return fb_user;
-    }
-
-
-    /**
-     * sets the needed Firebase user
-     * created by: Fabio
-     * @param fb_user_ instance of FirebaseUser
-     */
-    public void setFb_user(FirebaseUser fb_user_) {
-        fb_user = fb_user_;
-    }
 
 
     /**
