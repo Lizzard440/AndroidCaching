@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
+    
 
     /**
      * Evaluates intent results
