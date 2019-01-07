@@ -11,7 +11,6 @@ package com.example.fabiouceda.gui_test;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,9 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import java.io.File;
+import static com.example.fabiouceda.gui_test.R.drawable.ic_add_circle_outline_black_128dp;
 
 public class local_challanges_fragment extends Fragment {
 
@@ -88,15 +86,7 @@ public class local_challanges_fragment extends Fragment {
 
         // TODO retrieve images from private app-storage
 
-        for(int i = 0; i < 12; i++){
-            if(((MainActivity)getActivity()).does_file_exist(i)){
-                Bitmap mBmp = null;
-                mBmp = ((MainActivity) getActivity()).restore_img_from_internal_storage(i);
-                if (mBmp != null){
-                    ib_challanges[i].setImageBitmap(mBmp);
-                }
-            }
-        }
+        update_challanges();
 
         return v_local_challanges;
     }
@@ -108,7 +98,7 @@ public class local_challanges_fragment extends Fragment {
      * @param button_no number of slot that got clicked
      */
     private void stuff_got_clicked(final int button_no){
-        if(false /* TODO create check if slot is empty */){
+        if(((MainActivity)getActivity()).does_file_exist(button_no - 1)){
             // clicked on an existing challange
         } else {
             // clicked on an empty slot
@@ -128,7 +118,7 @@ public class local_challanges_fragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // TODO create own challange was selected. Now handle it!
-                    ((MainActivity) getActivity()).take_photo(button_no);
+                    ((MainActivity) getActivity()).take_photo(button_no - 1);
 
                     Log.v(TAG, "Create Own challenge selected");
                 }
@@ -147,9 +137,9 @@ public class local_challanges_fragment extends Fragment {
      * it will be shown.
      * @param selection_no number of slot that got selected
      */
-    private void select_challange(int selection_no){
+    private void select_challange(final int selection_no){
         Log.v(TAG, "Selected: " + Integer.toString(selection_no));
-        if(false /* TODO create check if the selected slot is empty */) {
+        if(((MainActivity)getActivity()).does_file_exist(selection_no - 1)) {
             // selected an existing challenge
             AlertDialog.Builder alert_builder = new AlertDialog.Builder(getActivity());
             alert_builder.setMessage(getString(R.string.selected_existing_challange));
@@ -157,8 +147,9 @@ public class local_challanges_fragment extends Fragment {
             alert_builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO Download Challenge from database was selected. now handle it!
-                    Log.v(TAG, "Download challenge selected");
+                    // TODO Remove corresponding Challange from internal Storage
+                    ((MainActivity)getActivity()).delete_image(selection_no - 1);
+                    update_challanges();
                 }
             });
             alert_builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -343,6 +334,23 @@ public class local_challanges_fragment extends Fragment {
                 return false;
             }
         });
+    }
+
+
+    private void update_challanges(){
+        for(int i = 0; i < 12; i++){
+            Log.v(TAG+"_EXISTS", String.valueOf(i) + ": " + String.valueOf(((MainActivity)getActivity()).does_file_exist(i)));
+            if(((MainActivity)getActivity()).does_file_exist(i)){
+                Bitmap mBmp = null;
+                mBmp = ((MainActivity) getActivity()).restore_img_from_internal_storage(i);
+                if (mBmp != null){
+                    ib_challanges[i].setImageBitmap(mBmp);
+                }
+            } else {
+                ib_challanges[i].setImageDrawable(getResources()
+                        .getDrawable(R.drawable.ic_add_circle_outline_black_128dp));
+            }
+        }
     }
 
 }

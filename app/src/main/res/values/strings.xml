@@ -93,16 +93,16 @@
 
     <!-- Filenames for internal image files -->
     <string name="recently_captured">new_challange</string>
-    <string name="pic_ch1">Challange_1</string>
-    <string name="pic_ch2">Challange_2</string>
-    <string name="pic_ch3">Challange_3</string>
-    <string name="pic_ch4">Challange_4</string>
-    <string name="pic_ch5">Challange_5</string>
-    <string name="pic_ch6">Challange_6</string>
-    <string name="pic_ch7">Challange_7</string>
-    <string name="pic_ch8">Challange_8</string>
-    <string name="pic_ch9">Challange_9</string>
-    <string name="pic_ch10">Challange_10</string>
-    <string name="pic_ch11">Challange_11</string>
-    <string name="pic_ch12">Challange_12</string>
+    <string name="pic_ch1">Challange_1.jpg</string>
+    <string name="pic_ch2">Challange_2.jpg</string>
+    <string name="pic_ch3">Challange_3.jpg</string>
+    <string name="pic_ch4">Challange_4.jpg</string>
+    <string name="pic_ch5">Challange_5.jpg</string>
+    <string name="pic_ch6">Challange_6.jpg</string>
+    <string name="pic_ch7">Challange_7.jpg</string>
+    <string name="pic_ch8">Challange_8.jpg</string>
+    <string name="pic_ch9">Challange_9.jpg</string>
+    <string name="pic_ch10">Challange_10.jpg</string>
+    <string name="pic_ch11">Challange_11.jpg</string>
+    <string name="pic_ch12">Challange_12.jpg</string>
 </resources>

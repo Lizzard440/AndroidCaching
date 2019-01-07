@@ -109,18 +109,18 @@ public class MainActivity extends AppCompatActivity
         tv_drawer_aliasname = Head.findViewById(R.id.nav_head_aliasname);
         random_nr_generator = new Random();
 
-        filenames[0] = getString(R.string.pic_ch1) + ".jpg";
-        filenames[1] = getString(R.string.pic_ch2) + ".jpg";
-        filenames[2] = getString(R.string.pic_ch3) + ".jpg";
-        filenames[3] = getString(R.string.pic_ch4) + ".jpg";
-        filenames[4] = getString(R.string.pic_ch5) + ".jpg";
-        filenames[5] = getString(R.string.pic_ch6) + ".jpg";
-        filenames[6] = getString(R.string.pic_ch7) + ".jpg";
-        filenames[7] = getString(R.string.pic_ch8) + ".jpg";
-        filenames[8] = getString(R.string.pic_ch9) + ".jpg";
-        filenames[9] = getString(R.string.pic_ch10) + ".jpg";
-        filenames[10] = getString(R.string.pic_ch11) + ".jpg";
-        filenames[11] = getString(R.string.pic_ch12) + ".jpg";
+        filenames[0] = getString(R.string.pic_ch1);
+        filenames[1] = getString(R.string.pic_ch2);
+        filenames[2] = getString(R.string.pic_ch3);
+        filenames[3] = getString(R.string.pic_ch4);
+        filenames[4] = getString(R.string.pic_ch5);
+        filenames[5] = getString(R.string.pic_ch6);
+        filenames[6] = getString(R.string.pic_ch7);
+        filenames[7] = getString(R.string.pic_ch8);
+        filenames[8] = getString(R.string.pic_ch9);
+        filenames[9] = getString(R.string.pic_ch10);
+        filenames[10] = getString(R.string.pic_ch11);
+        filenames[11] = getString(R.string.pic_ch12);
 
         // Code Snippet by "Coding in Flow" (Youtube)
         // Use Toolbar as new default Action Bar
@@ -377,50 +377,27 @@ public class MainActivity extends AppCompatActivity
      * @return absolute Path to Image File
      */
     private String saveImageToInternalStorage(Bitmap bmp_img, int challange_no){
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/androidcaching/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-
-        // resolve Image-Name
-        String filename = null;
-        switch(challange_no){
-            case 1: filename = getString(R.string.pic_ch1) + ".jpg";
-                break;
-            case 2: filename = getString(R.string.pic_ch2) + ".jpg";
-                break;
-            case 3: filename = getString(R.string.pic_ch3) + ".jpg";
-                break;
-            case 4: filename = getString(R.string.pic_ch4) + ".jpg";
-                break;
-            case 5: filename = getString(R.string.pic_ch5) + ".jpg";
-                break;
-            case 6: filename = getString(R.string.pic_ch6) + ".jpg";
-                break;
-            case 7: filename = getString(R.string.pic_ch7) + ".jpg";
-                break;
-            case 8: filename = getString(R.string.pic_ch8) + ".jpg";
-                break;
-            case 9: filename = getString(R.string.pic_ch9) + ".jpg";
-                break;
-            case 10: filename = getString(R.string.pic_ch10) + ".jpg";
-                break;
-            case 11: filename = getString(R.string.pic_ch11) + ".jpg";
-                break;
-            case 12: filename = getString(R.string.pic_ch12) + ".jpg";
-                break;
-        }
+        File directory = getDir("imageDir", Context.MODE_PRIVATE);
 
         // Create new image file
-        File mpath = new File(directory, filename);
+        File img_Path = new File(directory, filenames[challange_no]);
 
         FileOutputStream mfos = null;
         try{
-            mfos = new FileOutputStream(mpath);
+            mfos = new FileOutputStream(img_Path);
             // Use the compress method on the bitmap to write to the Outputstream
             bmp_img.compress(Bitmap.CompressFormat.PNG, 100, mfos);
             Log.v(TAG+"_STORAGE", "success");
             challange_exists[i_selected_challange] = true;
-        } catch (FileNotFoundException e) {
+            // onCreate gets called without calling onStop, therefore the array above never gets
+            // saved. So we do it manually:
+            SharedPreferences.Editor edit = sharedPref.edit();
+            for(int i=0; i<12; i++){
+                edit.putBoolean(filenames[i], challange_exists[i]);
+            }
+            edit.apply();
+        } catch (Exception e) {
             e.printStackTrace();
         }finally {
             try{
@@ -429,21 +406,30 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+        Log.v(TAG+"Filesystem", "File saved to: " + directory.getAbsolutePath());
         return directory.getAbsolutePath();
     }
 
 
+    /**
+     * Restores a Image from the local directory
+     * Created by: Fabio
+     * @param ref_no
+     * @return
+     */
     public Bitmap restore_img_from_internal_storage(int ref_no){
         Bitmap mBmp = null;
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/androidcaching/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File directory = getDir("imageDir", Context.MODE_PRIVATE);
+        File img_to_load = new File (directory, filenames[ref_no]);
 
         try{
-            File mfile = new File (directory.getAbsolutePath(), filenames[ref_no]);
-            mBmp = BitmapFactory.decodeStream(new FileInputStream(mfile));
+            mBmp = BitmapFactory.decodeStream(new FileInputStream(img_to_load));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            // if file was not found, declare the corresponging slot as free with setting the
+            // existence of the challenge to false
+            challange_exists[ref_no] = false;
         }
         return mBmp;
 
@@ -451,10 +437,23 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Tests if a file is existent
+     * deletes an Image from the local app storage
+     * Created by: Fabio
+     * @param number
+     */
+    public void delete_image(int number){
+
+        File directory = getDir("imageDir", Context.MODE_PRIVATE);
+        File del_file = new File (directory.getAbsolutePath(), filenames[number]);
+        del_file.delete();
+        challange_exists[number] = false;
+        Log.v(TAG, "Challange " + String.valueOf(number) + "deleted");
+    }
+
+
+    /**
+     * reads bool array if file should be existent
      * Created by:Fabio
-     * code by: https://stackoverflow.com/questions/10576930/trying-to-check-if-a-file-exists-in-
-     * internal-storage
      * @param num number of the slot the file must be present for
      * @return true if file exists in internal app storage
      */

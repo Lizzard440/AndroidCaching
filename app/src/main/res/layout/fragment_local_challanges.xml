@@ -28,7 +28,7 @@
         android:paddingTop="50dp">
 
         <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -39,8 +39,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp" />
 
             <ImageButton
@@ -49,8 +47,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_2"/>
             <ImageButton
@@ -59,15 +55,13 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_3"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -77,8 +71,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_4"/>
 
@@ -88,8 +80,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_5"/>
             <ImageButton
@@ -98,15 +88,13 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_6"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -116,8 +104,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_7"/>
 
@@ -127,8 +113,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_8"/>
             <ImageButton
@@ -137,15 +121,13 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_9"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -155,8 +137,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_10"/>
 
@@ -166,8 +146,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_11"/>
             <ImageButton
@@ -176,8 +154,6 @@
                 android:layout_weight=".33"
                 android:background="@color/locals_challanges_bg"
                 android:scaleType="centerInside"
-                android:scaleX=".5"
-                android:scaleY=".5"
                 android:src="@drawable/ic_add_circle_outline_black_128dp"
                 android:id="@+id/Loc_Challange_12"/>
 
