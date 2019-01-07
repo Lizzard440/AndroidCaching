@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 // set eMail
                                 androidCachingUser.seteMail(user.getEmail());
 
-                                uploadInDB(androidCachingUser);
+                                uploadUserInDB(androidCachingUser);
 
                                 i_register_state = 0;
                             }
@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * code from Firebase Assistant
      * @param user AndroidCaching-User to upload to database
      */
-    public void uploadInDB(ACUser user) {
+    public void uploadUserInDB(ACUser user) {
         db.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -564,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * created by: Kevin
      * code from Firebase Assistant
      */
-    public void readFromDB() {
+    public void readUserFromDB() {
         db.collection("users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
